@@ -1,0 +1,39 @@
+{
+ "verificacao": "num_ctx_adaptativo",
+ "executado_em": "2026-10-05T04:31:13+00:00",
+ "lang": "pt",
+ "ata": "20021014",
+ "n_chars_ata": 5807,
+ "seed": 10015,
+ "llm_model": "llama3.1:8b",
+ "resumo_identico_entre_patamares": true,
+ "medicoes": [
+  {
+   "num_ctx": 8192,
+   "sha256_resumo": "8853f7654aee48139dd91e68c20d6531175305381cba7ed649ae7a70354ee072",
+   "n_chars_resumo": 930,
+   "prompt_eval_count": 1706,
+   "eval_count": 270,
+   "tempo_s": 27.13,
+   "truncamento_detectado": false
+  },
+  {
+   "num_ctx": 16384,
+   "sha256_resumo": "8853f7654aee48139dd91e68c20d6531175305381cba7ed649ae7a70354ee072",
+   "n_chars_resumo": 930,
+   "prompt_eval_count": 1706,
+   "eval_count": 270,
+   "tempo_s": 30.39,
+   "truncamento_detectado": false
+  },
+  {
+   "num_ctx": 32768,
+   "sha256_resumo": "8853f7654aee48139dd91e68c20d6531175305381cba7ed649ae7a70354ee072",
+   "n_chars_resumo": 930,
+   "prompt_eval_count": 1706,
+   "eval_count": 270,
+   "tempo_s": 43.97,
+   "truncamento_detectado": false
+  }
+ ]
+}

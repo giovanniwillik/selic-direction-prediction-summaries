@@ -1,0 +1,44 @@
+{
+ "verificacao": "primeira_chamada_equivale_estado_limpo",
+ "executado_em": "2026-10-20T23:28:10+00:00",
+ "ollama_version": "0.40.5",
+ "todos_equivalentes": true,
+ "casos": [
+  {
+   "lang": "pt",
+   "data": "20230920",
+   "num_ctx": 8192,
+   "ata_anterior": "20230802",
+   "primeira_igual_estado_limpo": true,
+   "quente_igual_primeira": false,
+   "quente_igual_variante_quente_0351": true,
+   "sha256_primeira": "1ce90f427680a361803a2778fbd221d91f6654904653638213b3ffb41a2f6f29",
+   "sha256_quente": "4fefc8a3b484da1326a6b9f3e57f5c1fb104cc55ee860539fe438797c0985aa2",
+   "sha256_estado_limpo": "1ce90f427680a361803a2778fbd221d91f6654904653638213b3ffb41a2f6f29"
+  },
+  {
+   "lang": "en",
+   "data": "20070606",
+   "num_ctx": 16384,
+   "ata_anterior": "20070418",
+   "primeira_igual_estado_limpo": true,
+   "quente_igual_primeira": false,
+   "quente_igual_variante_quente_0351": true,
+   "sha256_primeira": "bf0221ab3af14316077eff5fd8ee5de30303c1e4a44faa024e167403f76b2196",
+   "sha256_quente": "0eaaf25a98276e9c306b0e923773020c17ecede4277f20b633ff663b08db036c",
+   "sha256_estado_limpo": "bf0221ab3af14316077eff5fd8ee5de30303c1e4a44faa024e167403f76b2196"
+  },
+  {
+   "lang": "en",
+   "data": "20110720",
+   "num_ctx": 16384,
+   "ata_anterior": "20110608",
+   "primeira_igual_estado_limpo": true,
+   "quente_igual_primeira": false,
+   "quente_igual_variante_quente_0351": true,
+   "sha256_primeira": "7ce806ef596b6cc6b9ff39e4de5786f1264a8ecf131c581057333694e4490af4",
+   "sha256_quente": "28819e05557bdee2a3cba370076bb271b5837ce30a145258cad4dca682c355cc",
+   "sha256_estado_limpo": "7ce806ef596b6cc6b9ff39e4de5786f1264a8ecf131c581057333694e4490af4"
+  }
+ ]
+}

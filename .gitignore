@@ -1,0 +1,56 @@
+# Ambientes, caches e arquivos do sistema
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+
+# Material interno de trabalho
+.agents/
+ic_exploracao/.backup/
+
+# Arquivos do repositório de Forti (2025), que não declara licença.
+# São obtidos na reprodução (ver README.md, "Como reproduzir").
+/dataset/
+/data/
+/src/
+/model/
+
+# Logs de execução
+ic_exploracao/output/algoritmo1/logs/
+ic_exploracao/validacao_prompt/log_prompts.txt
+*.log
+*.pid
+
+# Material local da IC que não entra no repositório público
+ic_exploracao/resumos/backup_antes_separacao_20261019/
+ic_exploracao/HANDOFF_ESTADO_ATUAL.md
+ic_exploracao/HANDOFF_SUMARIZACAO.md
+ic_exploracao/REVISAO_LITERATURA.md
+ic_exploracao/ANALISE_EXPLORATORIA.md
+ic_exploracao/config.py
+ic_exploracao/utils.py
+ic_exploracao/01_teste_sumarizacao.ipynb
+ic_exploracao/output/01_exploracao_prompts.json
+ic_exploracao/ESPECIFICACAO_PROMPT.docx
+ic_exploracao/gerar_especificacao_docx.py
+ic_exploracao/historico/
+
+# Versões anteriores do relatório (histórico local) e estilos não usados
+ic_exploracao/latex/algoritmo1_sumarizacao.tex
+ic_exploracao/latex/algoritmo2_predicao.tex
+ic_exploracao/latex/especificacao_prompt.tex
+ic_exploracao/latex/experimento_determinismo.tex
+ic_exploracao/latex/resultados_algoritmo1.tex
+ic_exploracao/latex/caption2.sty
+ic_exploracao/latex/sbc.bst
+
+# Arquivos auxiliares do LaTeX
+*.aux
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz

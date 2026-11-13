@@ -1,0 +1,39 @@
+{
+ "verificacao": "num_ctx_adaptativo",
+ "executado_em": "2026-10-05T04:33:54+00:00",
+ "lang": "en",
+ "ata": "20021014",
+ "n_chars_ata": 6447,
+ "seed": 10015,
+ "llm_model": "llama3.1:8b",
+ "resumo_identico_entre_patamares": true,
+ "medicoes": [
+  {
+   "num_ctx": 8192,
+   "sha256_resumo": "6d1e10a6e6f0d8b3c9e358016aabee45041308f1327f69427d859ed91770b30c",
+   "n_chars_resumo": 1199,
+   "prompt_eval_count": 1423,
+   "eval_count": 252,
+   "tempo_s": 44.72,
+   "truncamento_detectado": false
+  },
+  {
+   "num_ctx": 16384,
+   "sha256_resumo": "6d1e10a6e6f0d8b3c9e358016aabee45041308f1327f69427d859ed91770b30c",
+   "n_chars_resumo": 1199,
+   "prompt_eval_count": 1423,
+   "eval_count": 252,
+   "tempo_s": 45.35,
+   "truncamento_detectado": false
+  },
+  {
+   "num_ctx": 32768,
+   "sha256_resumo": "6d1e10a6e6f0d8b3c9e358016aabee45041308f1327f69427d859ed91770b30c",
+   "n_chars_resumo": 1199,
+   "prompt_eval_count": 1423,
+   "eval_count": 252,
+   "tempo_s": 51.93,
+   "truncamento_detectado": false
+  }
+ ]
+}

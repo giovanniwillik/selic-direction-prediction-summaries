@@ -1,0 +1,84 @@
+{
+ "experimento": "determinismo_temperature_0",
+ "definido_em": "2026-10-12T03:59:56+00:00",
+ "criterio": "dez posicoes igualmente espacadas na ordenacao das 202 atas por comprimento do texto em portugues, extremos incluidos",
+ "n_atas": 10,
+ "n_sub": 10,
+ "idiomas": [
+  "pt",
+  "en"
+ ],
+ "temperature": 0.0,
+ "atas": [
+  {
+   "data": "20021014",
+   "posicao_na_ordenacao": 0,
+   "n_chars_pt": 5807,
+   "patamar_pt": 8192,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20190206",
+   "posicao_na_ordenacao": 22,
+   "n_chars_pt": 14311,
+   "patamar_pt": 8192,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20181031",
+   "posicao_na_ordenacao": 45,
+   "n_chars_pt": 17052,
+   "patamar_pt": 8192,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20230920",
+   "posicao_na_ordenacao": 67,
+   "n_chars_pt": 22850,
+   "patamar_pt": 8192,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20160302",
+   "posicao_na_ordenacao": 89,
+   "n_chars_pt": 27416,
+   "patamar_pt": 16384,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20040218",
+   "posicao_na_ordenacao": 112,
+   "n_chars_pt": 38471,
+   "patamar_pt": 16384,
+   "patamar_en": 8192
+  },
+  {
+   "data": "20041215",
+   "posicao_na_ordenacao": 134,
+   "n_chars_pt": 47455,
+   "patamar_pt": 16384,
+   "patamar_en": 16384
+  },
+  {
+   "data": "20070606",
+   "posicao_na_ordenacao": 156,
+   "n_chars_pt": 56310,
+   "patamar_pt": 32768,
+   "patamar_en": 16384
+  },
+  {
+   "data": "20110720",
+   "posicao_na_ordenacao": 179,
+   "n_chars_pt": 59641,
+   "patamar_pt": 32768,
+   "patamar_en": 16384
+  },
+  {
+   "data": "20081210",
+   "posicao_na_ordenacao": 201,
+   "n_chars_pt": 67477,
+   "patamar_pt": 32768,
+   "patamar_en": 16384
+  }
+ ]
+}

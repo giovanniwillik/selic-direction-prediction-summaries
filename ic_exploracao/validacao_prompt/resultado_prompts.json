@@ -1,0 +1,130 @@
+{
+ "A_neutro": [
+  {
+   "n_tokens_bert": 358,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "5/7",
+   "n_chars": 1758,
+   "ata": 270,
+   "tempo_s": 76.1,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e do cenário do Copom (Comitê de Política Monetária) da República Federativa do Brasil. O cenário externo é considerado adverso e incerto, devido à conjuntura e política econômica nos Estados Unidos, principalmente em relação à política comercial e seus efeitos.\n\nA política comercial alimenta incertezas sobre a economia global, notadamente sobre a magnitude da desaceleração econômica e sobre o efeito heterogêneo no cenário inflacionário entre os países, com repercussões relevantes sobre a condução da política monetária.\n\nO cenário doméstico também é analisado, com o conjunto dos indicadores de atividade econômica e do mercado de trabalho apresentando dinamismo, mas com uma incipiente moderacao no crescimento. A inflação cheia e as medidas subjacentes mantiveram-se acima da meta para a inflação.\n\nO Comitê analisou o cenário prospectivo de inflação, considerando o cenário internacional, a atividade econômica, a demanda agregada, as expectativas de inflação e a inflação corrente. O cenário externo é considerado adverso e particularmente incerto, com incertezas sobre a política tarifária norte-americana e a resposta tarifária dos demais países.\n\nO Comitê também avaliou a conjuntura de atividade, que segue marcada por sinais mistos com relação à desaceleração de atividade, mas com uma incipiente moderacao de crescimento. A política monetária significativamente contracionista já tem contribuído e seguirá contribuindo para a moderacao de crescimento.\n\nO Comitê decidiu elevar a taxa básica de juros em 0,50 ponto percentual, para 14,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+  },
+  {
+   "n_tokens_bert": 258,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "5/7",
+   "n_chars": 1263,
+   "ata": 274,
+   "tempo_s": 116.9,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e do cenário do Comitê de Política Monetária (Copom) do Banco Central do Brasil. O ambiente externo é considerado incerto, com reflexos nas condições financeiras globais, e o cenário doméstico apresenta uma trajetória de moderação no crescimento da atividade econômica.\n\nO Comitê analisou o cenário prospectivo de inflação, considerando fatores como a atividade econômica, a demanda agregada, as expectativas de inflação e a inflação corrente. O cenário externo é considerado incerto, com riscos de longo prazo, como a política comercial norte-americana e a precificação apropriada de fundamentos.\n\nAs expectativas de inflação permanecem acima da meta, e o Comitê avalia que a perseverança, firmeza e serenidade na condução da política monetária são fundamentais para a convergência da inflação a meta com menor custo.\n\nO Comitê decidiu manter a taxa básica de juros em 15,00% a.a., considerando que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante. O Comitê enfatiza que seguirá vigilante e que os passos futuros da política monetária podem ser ajustados, e que não hesitará em retomar o ciclo de ajuste caso julgue apropriado."
+  },
+  {
+   "n_tokens_bert": 338,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "6/7",
+   "n_chars": 1574,
+   "ata": 279,
+   "tempo_s": 34.4,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e do cenário do Copom (Comitê de Política Monetária) da República Federativa do Brasil. O ambiente externo permanece incerto devido à indefinição sobre os termos do acordo para cessar os conflitos armados no Oriente Médio e às consequências dos efeitos já materializados desses conflitos.\n\nA atividade econômica no Brasil apresentou aceleração no primeiro trimestre do ano, com setores mais ciclicos voltando a desempenhar papel significativo e mercado de trabalho ainda com sinais de resiliência. No entanto, a inflação cheia e as medidas subjacentes aceleraram, distanciando-se adicionalmente da meta para a inflação.\n\nAs expectativas de inflação para 2026 e 2027 permanecem em valores acima da meta, situando-se em 5,30% e 4,10%, respectivamente. A projecção de inflação do Copom para o quarto trimestre de 2027, atual horizonte relevante de política monetária, situa-se em 3,7%.\n\nO Comitê de Política Monetária (Copom) avaliou que os riscos para a inflação, tanto de alta quanto de baixa, permanecem mais elevados que o usual, com assimetria altista. O Copom decidiu reduzir a taxa básica de juros para 14,25% a.a., considerando as observações do parágrafo 21 acima, e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta.\n\nO documento também apresenta as projecões de inflação no cenário de referência, que incluem a taxa de inflação acumulada em quatro trimestres para 2026 e para o quarto trimestre de 2027, atual horizonte relevante de política monetária."
+  }
+ ],
+ "B_tematico": [
+  {
+   "n_tokens_bert": 243,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "5/7",
+   "n_chars": 1188,
+   "ata": 270,
+   "tempo_s": 28.7,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e do cenário do Copom (Comitê de Política Monetária) da República Federativa do Brasil. O cenário externo é considerado adverso e incerto, devido à conjuntura e política econômica nos Estados Unidos, principalmente em relação à política comercial e seus efeitos.\n\nA atividade econômica ainda apresenta dinamismo, mas com uma incipiente moderacao no crescimento. A inflação corrente e as expectativas de inflação permanecem acima da meta. O Comitê analisou o cenário prospectivo de inflação, considerando o cenário internacional, a atividade econômica, a demanda agregada, as expectativas de inflação e a inflação corrente.\n\nO Comitê avaliou que o cenário de maior incerteza aumentou os riscos tanto de alta quanto de baixa para o cenário de inflação, com um debate se ainda se mantinha levemente assimetrico, mas menos assimetrico do que na reunião anterior, ou se já se podia definir como neutro.\n\nO Comitê decidiu elevar a taxa básica de juros em 0,50 ponto percentual, para 14,75% a.a., e entende que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+  },
+  {
+   "n_tokens_bert": 284,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "6/7",
+   "n_chars": 1334,
+   "ata": 274,
+   "tempo_s": 31.0,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e o cenário do Comitê de Política Monetária (Copom) da República Federativa do Brasil. O cenário externo é considerado incerto, com reflexos nas condições financeiras globais, e o Copom deve preservar uma postura de cautela.\n\nA atividade econômica doméstica segue uma trajetória de moderacao no crescimento, e o mercado de trabalho ainda mostra dinamismo. A inflação corrente e as expectativas de inflação permanecem acima da meta, com expectativas de inflação para 2025 e 2026 de 4,5% e 4,2%, respectivamente.\n\nO Comitê analisou o cenário prospectivo de inflação e considerou que o cenário de convergência da inflação a meta torna-se mais desafiador com expectativas desancoradas para prazos mais longos. O Comitê avaliou que, entre os riscos de alta para o cenário inflacionário e as expectativas de inflação, destacam-se a desancoragem das expectativas de inflação por período mais prolongado e a maior resiliência na inflação de serviços do que a projetada.\n\nO Comitê decidiu manter a taxa básica de juros em 15,00% a.a., considerando que essa decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante. O Comitê enfatiza que seguirá vigilante e que os passos futuros da política monetária podem ser ajustados."
+  },
+  {
+   "n_tokens_bert": 287,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "6/7",
+   "n_chars": 1329,
+   "ata": 279,
+   "tempo_s": 32.9,
+   "resumo": "O documento apresenta a atualização da conjuntura econômica e o cenário do Copom (Comitê de Política Monetária) em junho de 2026. O cenário externo permanece incerto devido às tensões geopolíticas no Oriente Médio e às consequências dos conflitos armados.\n\nA atividade econômica no Brasil apresentou aceleração no primeiro trimestre de 2026, com setores mais ciclicos voltando a desempenhar papel significativo. O mercado de trabalho ainda apresenta sinais de resiliência, com taxa de desemprego em patamares historicamente baixos.\n\nA inflação no Brasil está acima da meta, com expectativas de inflação para 2026 e 2027 acima da meta. A projecção de inflação do Copom para o quarto trimestre de 2027 é de 3,7%.\n\nO Comitê avaliou que os riscos para a inflação, tanto de alta quanto de baixa, permanecem mais elevados que o usual, com assimetria altista. Entre os riscos de alta, destacam-se a desancoragem das expectativas de inflação por período mais prolongado e a maior resiliência da inflação de serviços.\n\nO Comitê decidiu reduzir a taxa básica de juros para 14,25% a.a., considerando as observações sobre a magnitude do ciclo de calibracao e a necessidade de suavizar as flutuações do nível de atividade econômica e fomentar o pleno emprego.\n\nOs membros do Copom votaram a favor da decisão de reduzir a taxa básica de juros."
+  }
+ ],
+ "C_estruturado": [
+  {
+   "n_tokens_bert": 355,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "7/7",
+   "n_chars": 1511,
+   "ata": 270,
+   "tempo_s": 36.2,
+   "resumo": "**Cenario externo:**\nO ambiente externo é adverso e incerto, com impactos da política comercial norte-americana e da volatilidade de ativos. A economia global enfrenta desaceleração e incertezas sobre a inflação.\n\n**Atividade economica e mercado de trabalho:**\nA atividade econômica ainda apresenta dinamismo, mas com moderacao no crescimento. O mercado de trabalho é resiliente, com ganhos reais acima da produtividade e emprego em níveis historicamente baixos.\n\n**Inflacao e expectativas:**\nA inflação é adversa, com expectativas de inflação acima da meta para 2025 e 2026. O cenario de inflação é desafiador, com pressões na atividade econômica e no mercado de trabalho.\n\n**Condicoes financeiras e de credito:**\nO mercado de credito está inflexo, com elevação de taxa de juros e menor apetite ao risco. A política fiscal contribui para a redução do premio de risco e atua de forma contraciclica.\n\n**Balanco de riscos:**\nOs riscos de alta para o cenario inflacionário incluem desancoragem das expectativas de inflação, resiliência na inflação de serviços e conjunção de políticas econômicas externa e interna. Os riscos de baixa incluem desaceleração da atividade econômica e redução nos preços das commodities.\n\n**Decisao de politica monetaria:**\nO Copom decidiu elevar a taxa básica de juros em 0,50 ponto percentual, para 14,75% a.a., para assegurar a convergência da inflação a meta. A decisão é compatível com a estratégia de convergência da inflação para o redor da meta ao longo do horizonte relevante."
+  },
+  {
+   "n_tokens_bert": 417,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "7/7",
+   "n_chars": 1777,
+   "ata": 274,
+   "tempo_s": 40.1,
+   "resumo": "**Cenario externo:**\n- O ambiente externo ainda é incerto devido à conjuntura e política econômica nos EUA, afetando as condições financeiras globais.\n- A tensão geopolítica é marcante e os países emergentes devem ser cautelosos.\n- A apreciação do câmbio está relacionada ao diferencial de juros e à depreciada moeda norte-americana.\n\n**Atividade economica e mercado de trabalho:**\n- A atividade econômica segue uma trajetória de moderacao no crescimento.\n- O mercado de trabalho ainda mostra dinamismo.\n- A desaceleração da atividade econômica é mais acentuada em mercados mais sensíveis às condições financeiras.\n\n**Inflacao e expectativas:**\n- A inflação continua acima da meta, com expectativas de inflação para 2025 e 2026 em 4,5% e 4,2%, respectivamente.\n- As expectativas de inflação permanecem desancoradas e são determinantes para o comportamento da inflação futura.\n- O cenario de convergência da inflação a meta torna-se mais desafiador com expectativas desancoradas para prazos mais longos.\n\n**Condicoes financeiras e de credito:**\n- A política fiscal tem um impacto de curto prazo, majoritariamente por meio de estimulo a demanda agregada.\n- Uma política fiscal contraciclica e que contribua para a redução do premio de risco favorece a convergência da inflação a meta.\n\n**Balanco de riscos:**\n- O cenario de maior incerteza segue apresentando riscos mais elevados do que o usual tanto de alta quanto de baixa para o cenario de inflacao.\n- Destacam-se riscos de alta para o cenario inflacionario, como desancoragem das expectativas de inflacao por periodo mais prolongado e maior resiliencia na inflacao de servicos.\n- Riscos de baixa incluem desaceleracao da atividade economica domestica mais acentuada do que a projetada e desaceleracao global mais pronunciada."
+  },
+  {
+   "n_tokens_bert": 352,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "7/7",
+   "n_chars": 1603,
+   "ata": 279,
+   "tempo_s": 33.6,
+   "resumo": "**Cenario externo:**\nO ambiente externo permanece incerto devido à indefinição sobre os termos do acordo para cessar os conflitos armados no Oriente Médio e às consequências dos efeitos já materializados desses conflitos. A volatilidade de preços de ativos e commodities é elevada.\n\n**Atividade economica e mercado de trabalho:**\nA atividade econômica no primeiro trimestre do ano apresentou aceleração, com setores mais ciclicos voltando a desempenhar papel significativo. O mercado de trabalho ainda apresenta sinais de resiliência, com taxa de desemprego em patamares historicamente baixos.\n\n**Inflacao e expectativas:**\nA inflação cheia e as medidas subjacentes aceleraram, distanciando-se adicionalmente da meta para a inflação. As expectativas de inflação para 2026 e 2027 permanecem em valores acima da meta.\n\n**Condicoes financeiras e de credito:**\nA incerteza com relação ao cenário externo contribuiu para a permanência de incertezas com relação à política econômica dos Estados Unidos. A atividade econômica domestica manteve trajetória de moderacao no crescimento.\n\n**Balanco de riscos:**\nOs riscos para a inflação, tanto de alta quanto de baixa, permanecem mais elevados que o usual, com assimetria altista. Entre os riscos de alta, destacam-se a desancoragem das expectativas de inflação por período mais prolongado e a maior resiliência na inflação de serviços do que a projetada.\n\n**Decisao de politica monetaria:**\nO Copom decidiu reduzir a taxa básica de juros para 14,25% a.a., considerando as observações sobre a necessidade de serenidade e cautela na condução da política monetária."
+  }
+ ],
+ "D_extrativo": [
+  {
+   "n_tokens_bert": 506,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "6/7",
+   "n_chars": 2416,
+   "ata": 270,
+   "tempo_s": 50.4,
+   "resumo": "Aqui estão os 10 trechos mais informativos sobre a avaliação econômica apresentada, reproduzidos literalmente, na ordem em que aparecem:\n\n1. O ambiente externo mostra-se adverso e particularmente incerto em função da conjuntura e da política econômica nos Estados Unidos, principalmente acerca de sua política comercial e de seus efeitos.\n2. A política comercial alimenta incertezas sobre a economia global, notadamente acerca da magnitude da desaceleração econômica e sobre o efeito heterogeneo no cenário inflacionário entre os países, com repercussões relevantes sobre a condução da política monetária.\n3. O comportamento e a volatilidade de diferentes classes de ativos também têm sido afetados, com fortes reflexos nas condições financeiras globais.\n4. Em relação ao cenário doméstico, o conjunto dos indicadores de atividade econômica e do mercado de trabalho ainda tem apresentado dinamismo, mas observa-se uma incipiente moderacao no crescimento.\n5. As expectativas de inflação para 2025 e 2026 apuradas pela pesquisa Focus permanecem em valores acima da meta, situando-se em 5,5% e 4,5%, respectivamente.\n6. O cenário prospectivo de inflação segue desafiador em diversas dimensões, com o Comite analisando o cenário internacional, a atividade econômica, a demanda agregada, as expectativas de inflação e a inflação corrente.\n7. O cenário externo mostra-se adverso e particularmente incerto, com o choque de tarifas e o choque de incerteza ainda sendo de impacto bastante incerto.\n8. A conjuntura de atividade segue marcada por sinais mistos com relação à desaceleração de atividade, mas observa-se uma incipiente moderacao de crescimento.\n9. A política monetária significativamente contracionista já tem contribuído e seguirá contribuindo para a moderacao de crescimento, com impactos no mercado de crédito, nas sondagens empresariais, no mercado de câmbio, nos balancos das empresas e na moderacao de alguns indicadores de atividade e de mercado de trabalho.\n10. O Comite avalia que uma política fiscal que contribua para a redução do premio de risco e atue de forma contraciclica contribui para a convergência da inflação a meta, e que o esmorecimento no esforço de reformas estruturais e disciplina fiscal tem o potencial de elevar a taxa de juros neutra da economia, com impactos deleterios sobre a potência da política monetária e, consequentemente, sobre o custo de desinflação em termos de atividade."
+  },
+  {
+   "n_tokens_bert": 427,
+   "cabe_512": true,
+   "termos_vies": [],
+   "cobertura_temas": "6/7",
+   "n_chars": 2047,
+   "ata": 274,
+   "tempo_s": 42.5,
+   "resumo": "Aqui estão os 10 trechos mais informativos sobre a avaliação econômica apresentada, reproduzidos literalmente, na ordem em que aparecem:\n\n1. O ambiente externo ainda se mantem incerto em função da conjuntura e da política econômica nos Estados Unidos, com reflexos nas condições financeiras globais.\n2. Em relação ao cenário doméstico, o conjunto dos indicadores segue apresentando, conforme esperado, trajetória de moderacao no crescimento da atividade econômica, mas o mercado de trabalho ainda mostra dinamismo.\n3. As expectativas de inflação para 2025 e 2026 apuradas pela pesquisa Focus permanecem em valores acima da meta, situando-se em 4,5% e 4,2%, respectivamente.\n4. O cenário prospectivo de inflação segue desafiador em diversas dimensões, e o Comite analisou o cenário internacional, a atividade econômica, a demanda agregada, as expectativas de inflação e a inflação corrente.\n5. O cenário externo ainda segue incerto, e os riscos de longo prazo, como a política comercial norte-americana, a precificacao apropriada de fundamentos e a elevação de gastos fiscais em vários países, se mantêm presentes.\n6. A atividade econômica domestica manteve trajetória de moderacao no crescimento, reforcando a interpretação do cenário delineado pelo Comite estar, até agora, se concretizando.\n7. A moderacao e a própria heterogeneidade das trajetórias de crescimento entre diferentes setores e mercados são compatíveis com a política monetária em curso.\n8. O Comite reforça que o arrefecimento da demanda agregada é um elemento essencial do processo de reequilibrio entre oferta e demanda da economia e convergência da inflação a meta.\n9. As expectativas de inflação, medidas por diferentes instrumentos e obtidas de diferentes grupos de agentes seguiram trajetória de declínio, mas permanecem acima da meta de inflação em todos os horizontes.\n10. O Comite avalia que perseverança, firmeza e serenidade na condução da política monetária favorecerão a continuidade desse movimento, importante para a convergência da inflação a meta com menor custo."
+  },
+  {
+   "n_tokens_bert": 552,
+   "cabe_512": false,
+   "termos_vies": [],
+   "cobertura_temas": "5/7",
+   "n_chars": 2786,
+   "ata": 279,
+   "tempo_s": 62.6,
+   "resumo": "Aqui estão os 10 trechos mais informativos sobre a avaliação econômica apresentada, reproduzidos literalmente, na ordem em que aparecem:\n\n1. O ambiente externo permanece incerto em função da indefinição sobre os termos do acordo para cessar os conflitos armados no Oriente Médio e as consequências dos efeitos já materializados desses conflitos até o momento, com reflexos nas condições financeiras globais.\n\n2. Em relação ao cenário doméstico, o conjunto dos indicadores mostra aceleração da atividade econômica no primeiro trimestre do ano, com setores mais ciclicos voltando a desempenhar papel significativo, e mercado de trabalho ainda com sinais de resiliência.\n\n3. As expectativas de inflação para 2026 e 2027 apuradas pela pesquisa Focus permanecem em valores acima da meta, situando-se em 5,30% e 4,10%, respectivamente.\n\n4. A incerteza com relação ao cenário externo seguiu em níveis elevados. Além das indefinições em relação aos desdobramentos das tensões geopolíticas, colaborou para esse cenário a permanência de incertezas com relação à política econômica dos Estados Unidos.\n\n5. A atividade econômica doméstica manteve trajetória de moderacao no crescimento, tal como antecipado pelo Comitê. O Comitê relembra que o arrefecimento da demanda agregada e um elemento essencial do processo de reequilibrio entre oferta e demanda da economia e convergência da inflação a meta.\n\n6. A moderacao e a própria heterogeneidade das trajetórias de crescimento entre diferentes setores e mercados são compativeis com a política monetária em curso. Mercados mais sensíveis às condições financeiras apresentam maior desaceleracao, ao passo que mercados mais sensíveis à renda apresentam maior resiliência.\n\n7. O Comitê segue acompanhando detidamente o mercado de trabalho. A taxa de desemprego tem, recorrentemente, se mantido em patamares historicamente baixos enquanto os rendimentos reais médios tem mantido a tendência de elevação acima do crescimento da produtividade do trabalho.\n\n8. A política fiscal tem um impacto de curto prazo, majoritariamente por meio de estimulo a demanda agregada, e uma dimensão mais estrutural, que tem potencial de afetar a percepção sobre a sustentabilidade da dívida e impactar o premio a termo da curva de juros.\n\n9. As expectativas de inflação, medidas por diferentes instrumentos e obtidas de diferentes grupos de agentes permanecem acima da meta de inflação em todos os horizontes. Desde a reunião anterior ficou evidente uma desancoragem adicional das expectativas de inflação para horizontes mais longos, em particular para o ano de 2028.\n\n10. O Comitê avalia que perseverança, firmeza e serenidade na condução da política monetária favorecerão a continuidade desse movimento, importante para a convergência da inflação a meta com menor custo."
+  }
+ ]
+}

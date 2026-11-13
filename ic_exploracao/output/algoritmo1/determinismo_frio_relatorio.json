@@ -1,0 +1,218 @@
+{
+ "experimento": "determinismo_temperature_0",
+ "condicao": "cache_frio",
+ "verificado_em": "2026-10-20T12:16:28+00:00",
+ "criterio_amostra": "dez posicoes igualmente espacadas na ordenacao das 202 atas por comprimento do texto em portugues, extremos incluidos",
+ "n_sub": 10,
+ "temperature": 0.0,
+ "llm_model": "llama3.1:8b",
+ "llm_digest": "46e0c10c039e",
+ "n_combinacoes_verificadas": 20,
+ "n_combinacoes_com_variacao": 0,
+ "todas_identicas": true,
+ "regra_decisao": "N_sub = 1 se todas as submissoes de toda ata da amostra forem identicas byte a byte; senao N_sub = 10",
+ "n_sub_decidido": 1,
+ "incompletas": [],
+ "por_ata": [
+  {
+   "lang": "pt",
+   "data": "20021014",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "8853f7654aee"
+  },
+  {
+   "lang": "pt",
+   "data": "20190206",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "85ad4c03a47a"
+  },
+  {
+   "lang": "pt",
+   "data": "20181031",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "9de2059e0e6f"
+  },
+  {
+   "lang": "pt",
+   "data": "20230920",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "1ce90f427680"
+  },
+  {
+   "lang": "pt",
+   "data": "20160302",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "a7ecc6ae35fa"
+  },
+  {
+   "lang": "pt",
+   "data": "20040218",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "b46fa6d0d46b"
+  },
+  {
+   "lang": "pt",
+   "data": "20041215",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "ea82c7cf9406"
+  },
+  {
+   "lang": "pt",
+   "data": "20070606",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "b0bb2f69eeb1"
+  },
+  {
+   "lang": "pt",
+   "data": "20110720",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "e06f6a0b5996"
+  },
+  {
+   "lang": "pt",
+   "data": "20081210",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "60eac6f635d0"
+  },
+  {
+   "lang": "en",
+   "data": "20021014",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "6d1e10a6e6f0"
+  },
+  {
+   "lang": "en",
+   "data": "20190206",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "3715c7864932"
+  },
+  {
+   "lang": "en",
+   "data": "20181031",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "dfe2aa0ad0e2"
+  },
+  {
+   "lang": "en",
+   "data": "20230920",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "e95924596753"
+  },
+  {
+   "lang": "en",
+   "data": "20160302",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "5469e16efde4"
+  },
+  {
+   "lang": "en",
+   "data": "20040218",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "c8b84a9e84a7"
+  },
+  {
+   "lang": "en",
+   "data": "20041215",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "90dc1bd814a6"
+  },
+  {
+   "lang": "en",
+   "data": "20070606",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "bf0221ab3af1"
+  },
+  {
+   "lang": "en",
+   "data": "20110720",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "7ce806ef596b"
+  },
+  {
+   "lang": "en",
+   "data": "20081210",
+   "n_submissoes": 10,
+   "n_resumos_distintos": 1,
+   "identicos": true,
+   "n_tokens_bert_distintos": 1,
+   "sementes": "10015;19988;29961;39934;49907;59880;69853;79826;89799;99772",
+   "sha256_resumos": "384d2c973848"
+  }
+ ]
+}

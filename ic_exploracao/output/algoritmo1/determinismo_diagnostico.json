@@ -1,0 +1,89 @@
+{
+ "diagnostico": "causa_da_variacao",
+ "executado_em": "2026-10-12T15:32:08+00:00",
+ "hipotese": "a variacao observada decorre do estado do cache de prefixo do servidor, nao da semente",
+ "semente_nunca_explica": true,
+ "casos": [
+  {
+   "lang": "pt",
+   "data": "20230920",
+   "semente": 10015,
+   "num_ctx": 8192,
+   "sha256_j1": "1ce90f427680a361803a2778fbd221d91f6654904653638213b3ffb41a2f6f29",
+   "sha256_j2_a_j10": "4fefc8a3b484da1326a6b9f3e57f5c1fb104cc55ee860539fe438797c0985aa2",
+   "semente_explica_variacao": false,
+   "chamadas": [
+    {
+     "ordem": 1,
+     "estado_cache": "fria",
+     "sha256": "1ce90f427680a361803a2778fbd221d91f6654904653638213b3ffb41a2f6f29",
+     "corresponde_a": "reproduziu j=1",
+     "eval_count": 422,
+     "tempo_s": 196.31
+    },
+    {
+     "ordem": 2,
+     "estado_cache": "quente",
+     "sha256": "4fefc8a3b484da1326a6b9f3e57f5c1fb104cc55ee860539fe438797c0985aa2",
+     "corresponde_a": "reproduziu j=2..10",
+     "eval_count": 418,
+     "tempo_s": 91.51
+    }
+   ]
+  },
+  {
+   "lang": "en",
+   "data": "20070606",
+   "semente": 10015,
+   "num_ctx": 16384,
+   "sha256_j1": "bf0221ab3af14316077eff5fd8ee5de30303c1e4a44faa024e167403f76b2196",
+   "sha256_j2_a_j10": "0eaaf25a98276e9c306b0e923773020c17ecede4277f20b633ff663b08db036c",
+   "semente_explica_variacao": false,
+   "chamadas": [
+    {
+     "ordem": 1,
+     "estado_cache": "fria",
+     "sha256": "bf0221ab3af14316077eff5fd8ee5de30303c1e4a44faa024e167403f76b2196",
+     "corresponde_a": "reproduziu j=1",
+     "eval_count": 439,
+     "tempo_s": 315.5
+    },
+    {
+     "ordem": 2,
+     "estado_cache": "quente",
+     "sha256": "0eaaf25a98276e9c306b0e923773020c17ecede4277f20b633ff663b08db036c",
+     "corresponde_a": "reproduziu j=2..10",
+     "eval_count": 460,
+     "tempo_s": 90.54
+    }
+   ]
+  },
+  {
+   "lang": "en",
+   "data": "20110720",
+   "semente": 10015,
+   "num_ctx": 16384,
+   "sha256_j1": "7ce806ef596b6cc6b9ff39e4de5786f1264a8ecf131c581057333694e4490af4",
+   "sha256_j2_a_j10": "28819e05557bdee2a3cba370076bb271b5837ce30a145258cad4dca682c355cc",
+   "semente_explica_variacao": false,
+   "chamadas": [
+    {
+     "ordem": 1,
+     "estado_cache": "fria",
+     "sha256": "7ce806ef596b6cc6b9ff39e4de5786f1264a8ecf131c581057333694e4490af4",
+     "corresponde_a": "reproduziu j=1",
+     "eval_count": 364,
+     "tempo_s": 353.14
+    },
+    {
+     "ordem": 2,
+     "estado_cache": "quente",
+     "sha256": "28819e05557bdee2a3cba370076bb271b5837ce30a145258cad4dca682c355cc",
+     "corresponde_a": "reproduziu j=2..10",
+     "eval_count": 560,
+     "tempo_s": 121.43
+    }
+   ]
+  }
+ ]
+}

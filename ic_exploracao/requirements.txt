@@ -1,0 +1,32 @@
+# LLM local (interface com Ollama)
+ollama==0.4.7
+
+# Modelos BERT/BERTimbau (mesma stack do TCC)
+transformers==4.44.2
+torch==2.4.1
+datasets==3.0.1
+
+# Machine Learning e avaliação
+scikit-learn==1.5.2
+numpy==1.26.4
+
+# Avaliação de resumos
+rouge-score==0.1.2
+bert-score==0.3.13
+
+# Embeddings de sentença (sub-rotina D do Algoritmo 1 — entrada E11)
+# Versão fixada: compatível com transformers==4.44.2 e torch==2.4.1, não os atualiza.
+sentence-transformers==3.0.1
+
+# Processamento de dados
+pandas==2.2.3
+pyarrow==24.0.0
+scipy==1.15.3
+
+# Tokenização
+nltk==3.9.1
+
+# Utilitários
+tqdm==4.66.5
+jupyter==1.1.1
+ipykernel==6.29.5

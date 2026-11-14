@@ -10,7 +10,7 @@ instruções de reprodução no `README.md` da raiz do repositório.
 Ata completa (PT/EN)  →  LLM local (sumarização)  →  Resumo (≤512 tokens)  →  BERT/BERTimbau (fine-tuning)  →  Predição (alta/manut/queda)
 ```
 
-O trabalho é dividido em dois algoritmos independentes, especificados em
+O trabalho é dividido em dois algoritmos independentes, descritos em
 `latex/relatorio_ic_parcial.tex`:
 
 - **Algoritmo 1 — sumarização.** Gera um resumo por ata, nos dois idiomas, com o
@@ -18,8 +18,9 @@ O trabalho é dividido em dois algoritmos independentes, especificados em
   por um experimento de determinismo, que mediu variância nula com
   `temperature = 0`. Concluído: 404 resumos.
 - **Algoritmo 2 — classificação.** Fine-tuning de BERT/BERTimbau sobre os resumos,
-  replicando o protocolo de Forti (2025). Especificado no relatório, **ainda não
-  executado**.
+  replicando o protocolo de Forti (2025). **Ainda não executado**; a
+  especificação aguarda a aprovação do orientador e entrará na seção 6.1 do
+  relatório.
 
 ## Estrutura
 

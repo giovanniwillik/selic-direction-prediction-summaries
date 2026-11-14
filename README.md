@@ -118,9 +118,10 @@ passadas.
 
 - **Algoritmo 1 (sumarização): concluído.** 404 resumos, 202 em português e
   202 em inglês, gerados em 19,7 h, sem falhas.
-- **Algoritmo 2 (classificação com BERT/BERTimbau): especificado no relatório,
-  ainda não executado.** Aguarda a aprovação do orientador. As seções de
-  resultados da classificação e de resultados gerais ainda não existem.
+- **Algoritmo 2 (classificação com BERT/BERTimbau): ainda não executado.** A
+  especificação aguarda a aprovação do orientador e entrará na seção 6.1 do
+  relatório, que está em branco nesta versão, assim como as de resultados da
+  classificação e de resultados gerais.
 
 ## Licença
 

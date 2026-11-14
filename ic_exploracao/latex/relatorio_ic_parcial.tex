@@ -1,12 +1,16 @@
-% Versao: v1 (09/11/2026)
+% Versao: v2 (13/11/2026)
 \documentclass[12pt]{article}
 
 \usepackage{sbc-template}
-\usepackage{graphicx,url}
+\usepackage{graphicx}
+\usepackage[hyphens]{url}
 \usepackage[utf8]{inputenc}
-\usepackage[brazil]{babel}
+\usepackage[brazilian]{babel}
 \usepackage{listings}
 \usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
 \usepackage[portuguese,onelanguage,ruled,vlined,nokwfunc]{algorithm2e}
 
 % Nota: o modelo original traz \usepackage[latin1]{inputenc} apos a chamada com
@@ -26,33 +30,34 @@
 }
 
 % algorithm2e: palavras-chave em portugues (portuguese + onelanguage), sem
-% ponto e virgula no fim das linhas, fonte um ponto menor que o texto e
-% comentarios em italico (o padrao do pacote e a fonte de maquina de escrever,
-% mais larga).
-\SetAlFnt{\small}
+% ponto e virgula no fim das linhas, fonte dois pontos menor que o texto e
+% comentarios em italico, para que cada bloco caiba numa pagina (um bloco [H]
+% nao quebra entre paginas).
+\SetAlFnt{\footnotesize}
 \DontPrintSemicolon
 \SetCommentSty{textit}
 \SetKwFunction{LimparEstado}{LimparEstado}
 \SetKwFunction{AmostraPorComprimento}{AmostraPorComprimento}
-\SetKwFunction{SimilaridadeLexical}{SimilaridadeLexical}
-\SetKwFunction{SimilaridadeRougeL}{SimilaridadeRougeL}
-\SetKwFunction{SimilaridadeEmbedding}{SimilaridadeEmbedding}
 \SetKwFunction{RelatarSimilaridades}{RelatarSimilaridades}
-\SetKwFunction{Ingerir}{Ingerir}
-\SetKwFunction{RepeticaoHoldout}{RepeticaoHoldout}
-\SetKwFunction{Desempenho}{Desempenho}
+
+% Identificadores e caminhos longos em fonte de maquina de escrever, com quebra
+% de linha permitida depois de hifen, barra e sublinhado.
+\DeclareUrlCommand\caminho{\urlstyle{tt}}
+
+% Coluna de largura automatica do tabularx, alinhada a esquerda, para que o
+% texto das celulas nao fique com espacos esticados.
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 \sloppy
 
 \title{Predizendo a taxa SELIC a partir de resumos de atas do COPOM\\
   \normalsize Relatório parcial de Iniciação Científica\\
-  \normalsize Versão v1 (09/11/2026)}
+  \normalsize Versão v2 (13/11/2026)}
 
 \author{Giovanni Willik Del Piccolo\inst{1}}
 
-\address{Escola de Artes, Ciências e Humanidades --- Universidade de São Paulo
-  (EACH/USP)\\
-  São Paulo -- SP -- Brasil
+\address{Escola de Artes, Ciências e Humanidades (EACH)\\
+  Universidade de São Paulo (USP) -- São Paulo -- SP -- Brasil
   \email{giovanniwillik@usp.br}
 }
 
@@ -63,36 +68,31 @@
 \begin{abstract}
   This partial report describes an undergraduate research project that asks
   whether summaries of the COPOM minutes, written by a language model running
-  locally, predict the direction of the SELIC rate better than the truncated
-  minutes used by the reference work, which fine-tuned BERT and BERTimbau on
-  the beginning and the end of each minute. The hypothesis is that a summary
-  fits the input limit of these classifiers while keeping more of the
-  information than truncation does. Before the algorithms were built, the
-  summarising model and the prompt were fixed, and an experiment showed that,
-  under greedy decoding and a uniform server state, repeated submissions of a
-  minute yield the same summary, so a single submission per minute suffices.
-  Algorithm 1, which generates the summaries, was specified and executed in
-  both languages, and the corpus of summaries is ready. Algorithm 2, which
-  classifies the direction of the next decision from the summaries under the
-  protocol of the reference work, is specified but has not been executed yet;
-  its results are future work.
+  locally, predict the direction of the SELIC rate better than the minutes
+  truncated by \textit{head+tail}, the input of the reference work, which
+  fine-tuned BERT and BERTimbau. The hypothesis is that a summary fits the
+  input limit of these classifiers and keeps more information than truncation
+  does. Initial studies fixed the summarising model and the prompt and showed
+  that, under greedy decoding and a uniform server state, repeated submissions
+  of a minute yield the same summary, so one submission per minute suffices.
+  Algorithm 1 produced the corpus of summaries in Portuguese and English. The
+  classification of the summaries and the comparison with the reference work
+  have not been executed yet.
 \end{abstract}
 
 \begin{resumo}
   Este relatório parcial descreve a Iniciação Científica que investiga se
   resumos das atas do COPOM, escritos por um modelo de língua executado
   localmente, predizem a direção da taxa SELIC melhor do que as atas truncadas
-  usadas no trabalho de referência, que fez o ajuste fino de BERT e BERTimbau
-  sobre o início e o fim de cada ata. A hipótese é que o resumo cabe no limite
-  de entrada desses classificadores e preserva mais informação do que o
-  truncamento. Antes de construir os algoritmos, fixaram-se o modelo
-  sumarizador e o prompt, e um experimento mostrou que, com decodificação gulosa
-  e estado do servidor uniforme, submissões repetidas de uma ata produzem o
-  mesmo resumo, de modo que basta uma submissão por ata. O Algoritmo 1, que gera
-  os resumos, foi especificado e executado nos dois idiomas, e o corpus de
-  resumos está pronto. O Algoritmo 2, que classifica a direção da decisão
-  seguinte a partir dos resumos com o protocolo do trabalho de referência, está
-  especificado e ainda não foi executado; seus resultados são trabalho futuro.
+  por \textit{head+tail}, entrada do trabalho de referência, que fez o ajuste
+  fino de BERT e BERTimbau. A hipótese é que o resumo cabe no limite de entrada
+  desses classificadores e preserva mais informação do que o truncamento.
+  Estudos iniciais fixaram o modelo sumarizador e o prompt e mostraram que, com
+  decodificação gulosa e estado do servidor uniforme, submissões repetidas de
+  uma ata produzem o mesmo resumo, de modo que basta uma submissão por ata. O
+  Algoritmo 1 gerou o corpus de resumos em português e em inglês. A
+  classificação dos resumos e a comparação com o trabalho de referência ainda
+  não foram executadas.
 \end{resumo}
 
 \section{Introdução}\label{sec:intro}
@@ -120,158 +120,122 @@ Comitê sobre os próximos passos. O objetivo é verificar se esses resumos são
 preditores melhores do que as atas truncadas. O projeto impõe três condições: o
 LLM reside na máquina local e não muda durante o estudo; o prompt é definido de
 antemão, sem escolher entre prompts pelo resultado da classificação (as
-restrições R1 a R3 da seção~\ref{sec:prompt-restricoes}); e a avaliação usa a
-mesma metodologia de Forti~\cite{forti2025}.
+restrições R1 a R3 da seção~\ref{sec:prompt}); e a avaliação usa a mesma
+metodologia de Forti~\cite{forti2025}.
 
-O trabalho é um encadeamento de dois algoritmos:
+Não foram encontrados trabalhos que usem um LLM local para resumir atas de
+banco central antes da classificação com BERT, nem que comparem, em documentos
+de política monetária, a sumarização por LLM com o truncamento
+\textit{head+tail} (seção~\ref{sec:relacionados}). Esta pesquisa combina a
+sumarização como pré-processamento~\cite{mutasodirin2024} com a previsão de
+política monetária~\cite{shah2023,fasolo2022} e a aplica às atas do COPOM.
 
-\begin{center}
-ata completa $\rightarrow$ Algoritmo 1 (sumarização) $\rightarrow$ resumo
-$\rightarrow$ Algoritmo 2 (classificação) $\rightarrow$ \{queda, manutenção,
-alta\}
-\end{center}
+Depois dos trabalhos relacionados (seção~\ref{sec:relacionados}) e da
+metodologia geral (seção~\ref{sec:metodologia}), a seção~\ref{sec:estudos}
+reúne os estudos que antecederam os algoritmos, e a
+seção~\ref{sec:sumarizacao} especifica a sumarização e relata a sua execução.
+As seções~\ref{sec:classificacao} e~\ref{sec:resultados-gerais} ficam em branco
+nesta versão, porque a classificação ainda não foi executada. A
+seção~\ref{sec:limitacoes} reúne as limitações e os próximos passos.
 
-Os dois algoritmos são independentes, por exigência do orientador: o Algoritmo
-2 recebe a tabela de resumos como dado de entrada e pode ser executado sem
-executar o Algoritmo 1. Este relatório é parcial porque o Algoritmo 2 está
-especificado mas ainda não foi executado.
+\section{Trabalhos relacionados}\label{sec:relacionados}
 
-A seção~\ref{sec:revisao} resume a literatura e justifica a escolha do modelo
-sumarizador. A seção~\ref{sec:dados} descreve os dados. A
-seção~\ref{sec:exploratoria} reúne o trabalho exploratório feito antes dos
-algoritmos: a escolha do prompt e o experimento que fixou o número de
-submissões por ata. A seção~\ref{sec:alg1} especifica o Algoritmo 1, e a
-seção~\ref{sec:res-alg1} relata o que a execução dele produziu. A
-seção~\ref{sec:alg2} especifica o Algoritmo 2. A seção~\ref{sec:limitacoes}
-reúne as limitações e os próximos passos. Os apêndices trazem material que
-pode ser ignorado na leitura: os textos dos candidatos a prompt, os textos
-divergentes do experimento de determinismo e a lista de artefatos.
-
-\section{Revisão da literatura}\label{sec:revisao}
-
-\subsection{Processamento de linguagem natural na comunicação de bancos
-centrais}
-
-A aplicação de processamento de linguagem natural à comunicação de bancos
-centrais segue três linhas: classificar o tom dos textos (\textit{hawkish},
-\textit{dovish} ou neutro), prever a direção da taxa de juros a partir deles e
-construir índices textuais para modelos macroeconômicos. A maior parte dos
-trabalhos estuda o Federal Reserve e o Banco Central Europeu.
-
-Na classificação de tom, Shah et al.~\cite{shah2023} criaram um conjunto de
-sentenças do FOMC anotadas como \textit{hawkish}, \textit{dovish} ou neutras e
-mostraram que modelos da família BERT captam esses sinais, embora a tarefa
-continue difícil mesmo com muitos dados. Gössi et al.~\cite{goessi2023}
-ajustaram o FinBERT às atas do FOMC e trataram as sentenças com sentimentos
-contraditórios, ligadas por conjunções adversativas, que os modelos genéricos
-classificam mal. Gambacorta et al.~\cite{gambacorta2024} retreinaram modelos
-codificadores em textos de bancos centrais e obtiveram, na classificação do tom
-das declarações do FOMC, resultados superiores aos dos modelos de base e de
-LLMs generativos, o que indica que a terminologia do domínio importa.
-
-Na previsão de decisões, Jingyi e Liu~\cite{jingyi2025} combinaram
-representações TF-IDF de textos do FOMC com indicadores econômicos e chegaram a
-AUC de 0,83 com um modelo híbrido, superior aos modelos que usam só o texto ou
-só os indicadores. Takano et al.~\cite{takano2025} fizeram vários agentes LLM,
-com crenças iniciais distintas, debaterem a decisão do FOMC, com resultado
-melhor que o de um LLM isolado. Tang e Yang~\cite{tang2026} extraíram, sem
-anotação manual, escores contínuos de tom a partir das representações internas
-de LLMs congelados; Yao et al.~\cite{yao2025} guiaram o raciocínio de um LLM
-pelos mecanismos de transmissão da política monetária; e Ouyang et
-al.~\cite{ouyang2024} combinaram texto, áudio e vídeo de conferências de
-política monetária. Esses trabalhos confirmam que os textos de política
-monetária têm sinal preditivo e que a qualidade da representação do texto
-importa.
-
-Sobre o Banco Central do Brasil, Fasolo et al.~\cite{fasolo2022} aplicaram
-modelos hierárquicos de tópicos (hLDA) às atas e aos comunicados do COPOM e
-mostraram que o tom dessa comunicação tem efeito mensurável sobre expectativas
-de inflação, atividade e incerteza. Araujo et al.~\cite{araujo2025} mostraram
-que embeddings de textos de bancos centrais trazem informação para prever a
-inflação além dos indicadores tradicionais, e Shah et al.~\cite{shah2025}
-reuniram um corpus de sentenças de 25 bancos centrais, inclusive o brasileiro. O
-trabalho mais próximo do contexto desta pesquisa é o de
-Forti~\cite{forti2025}, que é o seu \textit{baseline}.
-
-\subsection{Documentos longos no BERT: truncamento ou sumarização}
+O processamento de linguagem natural aplicado à comunicação de bancos
+centrais estuda sobretudo o Federal Reserve e o Banco Central Europeu. Na
+classificação do tom (\textit{hawkish}, \textit{dovish} ou neutro),
+Shah et al.~\cite{shah2023} mostraram que modelos da família BERT captam esses
+sinais em sentenças do FOMC, embora a tarefa continue difícil. Na previsão de
+decisões, Jingyi e Liu~\cite{jingyi2025} combinaram representações TF-IDF de
+textos do FOMC com indicadores econômicos e chegaram a AUC de 0,83, acima dos
+modelos que usam só uma das fontes. Sobre o Banco Central do Brasil, Fasolo et
+al.~\cite{fasolo2022} mostraram que o tom das atas e dos comunicados do COPOM
+tem efeito mensurável sobre expectativas de inflação, atividade e incerteza. O
+trabalho mais próximo desta pesquisa é o de Forti~\cite{forti2025}, que é o seu
+\textit{baseline}.
 
 O BERT aceita 512 tokens. Sun et al.~\cite{sun2019} compararam formas de
 truncar documentos longos e concluíram que manter o início e o fim
-(\textit{head+tail}) é a melhor delas, base da escolha de
-Forti~\cite{forti2025}. Mutasodirin e Prasojo~\cite{mutasodirin2024} compararam
-truncamento e sumarização como formas de encurtar documentos antes de
-classificá-los com BERT: os resumos superaram a maioria das variantes de
-truncamento, perderam só para manter o início do documento e ficaram próximos
-do desempenho com o texto completo. Os sumarizadores usados ali não eram LLMs.
-Uma alternativa sem sumarização é dividir o documento em trechos, processar
-cada um com BERT e combinar as saídas~\cite{pappagari2019}, ao custo de uma
-arquitetura mais complexa.
+(\textit{head+tail}) é a melhor delas, base da escolha de Forti. Mutasodirin e
+Prasojo~\cite{mutasodirin2024} compararam truncamento e sumarização como formas
+de encurtar documentos antes de classificá-los com BERT: os resumos superaram a
+maioria das variantes de truncamento, perderam só para manter o início do
+documento e, em alguns conjuntos de dados, ficaram próximos do desempenho com o
+texto completo. Os sumarizadores usados ali não eram LLMs. Uma alternativa sem
+sumarização é dividir o documento em trechos, processar cada um com BERT e
+combinar as saídas~\cite{pappagari2019}, ao custo de uma arquitetura mais
+complexa.
 
-Kim et al.~\cite{kim2025} simplificaram sentenças complexas das atas do FOMC
-antes de classificá-las e obtiveram classificações mais precisas, o que mostra
-que pré-processar um texto financeiro antes de classificá-lo pode ajudar. A
-diferença para esta pesquisa é que aqui o pré-processamento é um resumo do
-documento inteiro, e não a simplificação de cada sentença. Magdy et
-al.~\cite{magdy2026} usaram o LLaMA-3-8B-Instruct num esquema híbrido,
-extrativo e abstrativo, para resumir documentos longos, com resumos de
-qualidade competitiva.
+Entre os LLMs abertos, o LLaMA-3-8B teve resultados competitivos na
+sumarização, sobretudo de textos longos~\cite{rehman2025}. O risco principal é a
+fidelidade: Kim et al.~\cite{kim2024} encontraram erros de fidelidade em mais da
+metade dos resumos de livros produzidos pelos LLMs avaliados. As atas são muito
+mais curtas que livros, o que deve atenuar o problema, mas não o elimina. Em
+português, os modelos abertos maiores têm desempenho razoável, abaixo do obtido
+em inglês, com destaque para as famílias Llama 3 e Qwen~\cite{almeida2025}.
 
-\subsection{LLMs em sumarização e fidelidade}
+\section{Metodologia geral}\label{sec:metodologia}
 
-Rehman et al.~\cite{rehman2025} avaliaram BART, FLAN-T5, LLaMA-3-8B e Gemma-7B
-em cinco conjuntos de sumarização, com métricas ROUGE, BERTScore e METEOR, e o
-LLaMA-3-8B teve resultados competitivos, sobretudo em textos mais longos. O
-risco principal é a fidelidade: Kim et al.~\cite{kim2024} encontraram erros de
-fidelidade em mais da metade dos resumos de livros produzidos pelos LLMs
-avaliados. As atas são muito mais curtas que livros, o que deve atenuar o
-problema, mas não o elimina. Em português, Almeida et al.~\cite{almeida2025}
-avaliaram LLMs em um conjunto amplo de tarefas e registraram desempenho
-razoável dos modelos abertos maiores, abaixo do obtido em inglês, com destaque
-para as famílias Llama 3 e Qwen; Fernandes et al.~\cite{fernandes2024}
-publicaram um conjunto de transcrições de audiências públicas da Câmara dos
-Deputados para a sumarização de documentos longos em português, um domínio
-próximo ao das atas.
+O trabalho encadeia três estágios (figura~\ref{fig:pipeline}). A sumarização
+resume cada ata com um LLM local; a classificação faz o ajuste fino de BERT e
+BERTimbau sobre os resumos; a verificação compara o desempenho obtido com o do
+\textit{baseline} de Forti~\cite{forti2025}, que usou as atas truncadas. O
+modelo sumarizador, o prompt e o número de submissões por ata foram fixados
+antes, pelos estudos da seção~\ref{sec:estudos}.
 
-\subsection{Escolha do modelo sumarizador}\label{sec:escolha-llm}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+    node distance=4mm,
+    caixa/.style={draw, rounded corners=2pt, align=center, font=\small,
+      text width=23mm, minimum height=15mm, inner sep=2pt},
+    futura/.style={caixa, dashed},
+    dado/.style={align=center, font=\small, text width=23mm, inner sep=2pt},
+    seta/.style={-{Stealth[length=2mm]}, semithick}]
+  \node[dado] (atas) {Atas do COPOM\\em PT e EN\\(202 cada)};
+  \node[caixa, right=of atas] (sum) {Sumarização\\Algoritmo 1\\Llama 3.1 8B};
+  \node[dado, right=of sum] (res) {Tabela\\\texttt{Resumo}\\(404 resumos)};
+  \node[futura, right=of res] (cla) {Classificação\\Algoritmo 2\\BERT e\\BERTimbau};
+  \node[futura, right=of cla] (ver) {Verificação\\resumo contra\\truncamento};
+  \node[caixa, above=7mm of sum, text width=46mm, minimum height=10mm]
+    (est) {Estudos iniciais (seção~\ref{sec:estudos}):\\modelo, prompt e
+    \texttt{N\_sub} = 1};
+  \node[dado, below=7mm of ver, text width=38mm] (base)
+    {\textit{Baseline} de Forti:\\\textit{head+tail}, 30 repetições};
+  \draw[seta] (atas) -- (sum);
+  \draw[seta] (sum) -- (res);
+  \draw[seta] (res) -- (cla);
+  \draw[seta] (cla) -- (ver);
+  \draw[seta] (est) -- (sum);
+  \draw[seta] (base) -- (ver);
+\end{tikzpicture}
+\caption{Visão geral do trabalho. As caixas tracejadas são os estágios ainda
+não executados.}
+\label{fig:pipeline}
+\end{figure}
 
-O projeto exige que o LLM resida na máquina local, para não mudar durante o
-estudo; que resuma bem em português e em inglês; que funcione por prompt fixado
-de antemão; que gere resumos que caibam nos 512 tokens do BERT; que seja
-estável entre execuções; e que caiba no equipamento disponível, um MacBook Air
-M4 com 24 GB de memória.
+\paragraph{Sumarização.} O Algoritmo 1 (seção~\ref{sec:sumarizacao}) recebe as
+atas dos dois idiomas e devolve a tabela \texttt{Resumo}, com o texto literal
+de um resumo por ata, e a lista \texttt{Acima} dos resumos que passam de 512
+tokens no tokenizador do classificador de destino. Os resumos não são editados.
 
-Foram considerados quatro modelos abertos. O Llama 3.1 8B tem contexto de 128
-mil tokens, foi treinado em oito idiomas, inclusive o português, e a versão
-quantizada Q4\_K\_M ocupa cerca de 4,7 GB e roda com cerca de 8 GB de memória.
-O Qwen 2.5, nas versões de 7 e 14 bilhões de parâmetros, também tem contexto de
-128 mil tokens e se destaca em avaliações multilíngues. O Mistral 7B tem
-contexto de 32 mil tokens e foi treinado sobretudo em inglês. O Gemma 7B tem
-contexto de 8 mil tokens, menor que o das atas mais longas do corpus
-(seção~\ref{sec:num_ctx}), e foi descartado.
+\paragraph{Classificação.} O Algoritmo 2 (seção~\ref{sec:classificacao}) recebe
+a tabela \texttt{Resumo} como dado de entrada e pode ser executado sem executar
+o Algoritmo 1: os dois algoritmos são independentes, por exigência do
+orientador. Ele replica o protocolo de Forti, com 30 repetições de
+\textit{holdout}, divisão 80/20 estratificada e feita por reunião, semente 42,
+três recortes temporais e hiperparâmetros fixos, e muda apenas a entrada: o
+resumo em vez da ata truncada. Na ingestão, remove-se o preâmbulo dos resumos em
+inglês e corta-se o final dos que passam de 512 tokens, pelas regras decididas
+com o orientador (seção~\ref{sec:decisoes}).
 
-O modelo escolhido foi o Llama 3.1 8B Instruct~\cite{grattafiori2024}. A
-sumarização de documentos longos por modelos dessa família tem avaliação
-publicada~\cite{rehman2025,magdy2026}; o contexto de 128 mil tokens recebe
-qualquer ata inteira, sem truncar a entrada do sumarizador; o desempenho em
-português está entre os melhores dos modelos abertos~\cite{almeida2025}; a
-licença (Meta Llama 3.1 Community License) permite o uso acadêmico; e a versão
-quantizada deixa folga de memória na máquina. Com \texttt{temperature = 0} a
-decodificação é gulosa; a estabilidade entre execuções foi verificada depois,
-no experimento da seção~\ref{sec:determinismo}. O Qwen 2.5 7B ficou como
-alternativa e não precisou ser usado.
+\paragraph{Verificação.} Com a mesma semente e o mesmo número de repetições, a
+repetição $i$ desta pesquisa usa a mesma partição da repetição $i$ do
+\textit{baseline}, cujos resultados estão no repositório de
+Forti~\cite{forti2025}. A comparação é feita em 30 pares (resumo, truncamento)
+por idioma e recorte, e também por classe, em particular na classe manutenção,
+em que o \textit{baseline} falha.
 
-\subsection{Lacuna}
-
-Não foram encontrados trabalhos que usem um LLM local para resumir atas de
-banco central como pré-processamento para a classificação com BERT, que
-apliquem essa abordagem ao COPOM e à SELIC, ou que comparem de forma
-sistemática a sumarização por LLM com o truncamento \textit{head+tail} em
-documentos de política monetária. Esta pesquisa combina a sumarização como
-pré-processamento~\cite{mutasodirin2024}, o contexto de previsão de política
-monetária~\cite{shah2023,fasolo2022}, o uso de um LLM aberto executado
-localmente e a aplicação às atas do COPOM, estendendo Forti~\cite{forti2025}.
-
-\section{Dados}\label{sec:dados}
+\subsection{Dados}\label{sec:dados}
 
 O corpus é o de Forti~\cite{forti2025}: 202 atas do COPOM em cada idioma, de
 janeiro de 2002 a março de 2025. As atas em português foram obtidas pela API do
@@ -283,29 +247,25 @@ entradas \texttt{D\_pt} e \texttt{D\_en} dos procedimentos das
 seções~\ref{sec:determinismo} e~\ref{sec:alg1}.
 
 O alvo da classificação é a direção da decisão da reunião seguinte, em
-\{alta, manutenção, queda\}. Ele é construído a partir das datas e das decisões
-das reuniões, no próprio Algoritmo 2 (seção~\ref{sec:alg2}).
-
-O estudo usa três recortes temporais, com corte em 2016-01-01:
+\{alta, manutenção, queda\}, construída a partir das datas e das decisões das
+reuniões. O estudo usa três recortes temporais, com corte em 2016-01-01:
 \texttt{before\_2016}, com 129 atas por idioma, \texttt{after\_2016}, com 73, e
 \texttt{full}, com todas. O conjunto de atas usado para escolher o prompt é
-outro, posterior a março de 2025 e disjunto deste
-(seção~\ref{sec:prompt-restricoes}).
+outro, posterior a março de 2025 e disjunto deste (seção~\ref{sec:prompt}).
 
-\section{Etapa exploratória, anterior aos algoritmos}\label{sec:exploratoria}
+\subsection{Ambiente e reprodução}\label{sec:ambiente}
 
-Três decisões foram tomadas antes de construir o Algoritmo 1, e ele as recebe
-prontas: o modelo sumarizador (seção~\ref{sec:escolha-llm}), o prompt
-(seção~\ref{sec:prompt}) e o número de submissões por ata
-(seção~\ref{sec:determinismo}). As duas últimas valem para a combinação de
-servidor e modelo da tabela~\ref{tab:ambiente}, que registra o ambiente de todo
-o estudo.
+Todas as execuções usaram o ambiente da tabela~\ref{tab:ambiente}. O código,
+os resumos e as saídas estão no repositório público do
+projeto~\cite{delpiccolo2026}, na pasta \caminho{ic_exploracao/}; as atas de
+entrada e os resultados do \textit{baseline}, no repositório de
+Forti~\cite{forti2025}.
 
 \begin{table}[ht]
 \centering
 \caption{Ambiente de execução do estudo}
 \label{tab:ambiente}
-\begin{tabular}{|l|p{9.2cm}|}
+\begin{tabularx}{\linewidth}{|l|Y|}
 \hline
 \textbf{Componente} & \textbf{Versão} \\
 \hline
@@ -323,24 +283,46 @@ Python & 3.10.0 \\
 \hline
 transformers / torch & 4.44.2 / 2.4.1 \\
 \hline
-sentence-transformers & 3.0.1, modelo \texttt{paraphrase-multilingual-MiniLM-L12-v2} \\
+sentence-transformers & 3.0.1, modelo
+\caminho{paraphrase-multilingual-MiniLM-L12-v2} \\
 \hline
-Tokenizadores & \texttt{bert-base-portuguese-cased} (PT), \texttt{bert-base-cased}
-(EN) \\
+Tokenizadores & \caminho{bert-base-portuguese-cased} (PT),
+\caminho{bert-base-cased} (EN) \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
+
+\section{Estudos iniciais}\label{sec:estudos}
+
+Três decisões foram tomadas antes de construir o Algoritmo 1, e ele as recebe
+prontas: o modelo sumarizador (seção~\ref{sec:escolha-llm}), o prompt
+(seção~\ref{sec:prompt}) e o número de submissões por ata
+(seção~\ref{sec:determinismo}). As duas últimas valem para a combinação de
+servidor e modelo da tabela~\ref{tab:ambiente}.
+
+\subsection{Escolha do modelo sumarizador}\label{sec:escolha-llm}
+
+O LLM precisa residir na máquina local, resumir bem em português e em inglês por
+um prompt fixado de antemão, gerar resumos que caibam nos 512 tokens do BERT e
+caber num MacBook Air M4 com 24 GB de memória. Foram considerados o Llama 3.1
+8B, o Qwen 2.5 (7 e 14 bilhões de parâmetros), o Mistral 7B, treinado sobretudo
+em inglês, e o Gemma 7B, descartado porque o seu contexto de 8 mil tokens é
+menor que o das atas mais longas do corpus (seção~\ref{sec:num_ctx}).
+
+O modelo escolhido foi o Llama 3.1 8B Instruct~\cite{grattafiori2024}. A
+sumarização de documentos longos por modelos dessa família tem avaliação
+publicada~\cite{rehman2025}; o contexto de 128 mil tokens recebe
+qualquer ata inteira, sem truncar a entrada do sumarizador; o desempenho em
+português está entre os melhores dos modelos abertos~\cite{almeida2025}; a
+licença (Meta Llama 3.1 Community License) permite o uso acadêmico; e a versão
+quantizada Q4\_K\_M ocupa cerca de 4,7 GB e deixa folga de memória na máquina.
+A estabilidade entre execuções foi verificada depois, no experimento da
+seção~\ref{sec:determinismo}. O Qwen 2.5 7B ficou como alternativa e não
+precisou ser usado.
 
 \subsection{Escolha do prompt}\label{sec:prompt}
 
-Esta subseção registra como o prompt de sumarização foi definido: os
-candidatos, os dados de avaliação, os critérios aplicados, o critério
-descartado por invalidez e a decisão final. Inclui um erro metodológico da
-primeira rodada e a sua correção, porque fazem parte do processo de decisão.
-
-\subsubsection{Restrições e conjunto de validação}\label{sec:prompt-restricoes}
-
-O projeto (\texttt{projeto.pdf}, seção 3) impõe três restrições:
+O projeto de pesquisa impõe três restrições ao prompt:
 
 \begin{itemize}
 \item R1 --- O prompt deve ser definido a priori, em português e em inglês.
@@ -349,34 +331,31 @@ O projeto (\texttt{projeto.pdf}, seção 3) impõe três restrições:
 \item R3 --- O resumo deve caber nos 512 tokens de entrada do BERT/BERTimbau.
 \end{itemize}
 
-R1 e R2 combinadas implicam que a seleção não pode observar métricas da tarefa
-de classificação. Todo critério precisa ser intrínseco ao resumo produzido.
+R1 e R2 combinadas implicam que a seleção não pode observar métricas da
+classificação: todo critério precisa ser intrínseco ao resumo. Usar atas do
+recorte do estudo contaminaria o experimento, porque as mesmas atas seriam
+depois usadas no treino e na avaliação do classificador. Por isso foram
+coletadas as 11 atas posteriores a março de 2025 (reuniões 270 a 280), pela API
+pública do Banco Central e com o pré-processamento de Forti. A avaliação usou
+três delas --- 270 (20.955 caracteres), 274 (15.166) e 279 (16.650) ---, que
+cobrem os extremos e o meio da faixa de comprimento.
 
-Usar atas do recorte do trabalho base (janeiro de 2002 a março de 2025) para
-escolher o prompt contaminaria o experimento, pois as mesmas atas seriam depois
-usadas no treinamento e na avaliação do classificador. Foram coletadas, então,
-as 11 atas posteriores a março de 2025 (reuniões 270 a 280) pela API pública do
-Banco Central, conjunto disjunto do recorte base e não usado em nenhuma etapa de
-treinamento. O pré-processamento replica o do trabalho base: extração do texto
-do HTML, normalização NFKD, remoção de caracteres não ASCII e colapso de
-espaços.
-
-A avaliação foi conduzida em três dessas atas --- 270 (20.955 caracteres), 274
-(15.166) e 279 (16.650) ---, escolhidas por cobrirem os extremos e o meio da
-faixa de comprimento e por estarem distribuídas no intervalo temporal. As oito
-restantes não foram usadas.
-
-\subsubsection{Candidatos e critérios}\label{sec:prompt-candidatos}
-
-Quatro candidatos foram escritos antes de qualquer execução
-(tabela~\ref{tab:candidatos}). Os textos integrais, em português, estão no
-Apêndice~\ref{ap:candidatos}; as versões em inglês são traduções literais.
+\paragraph{Candidatos e critérios.} Quatro candidatos foram escritos antes de
+qualquer execução (tabela~\ref{tab:candidatos}); nenhum pede a predição da
+decisão futura ou um julgamento de postura. Os textos integrais estão no
+repositório do projeto~\cite{delpiccolo2026}, em
+\caminho{ic_exploracao/validacao_prompt/testar_prompts.py}. Os critérios,
+todos intrínsecos ao resumo, foram quatro: V1, orçamento de tokens (no máximo
+512 no tokenizador de destino, restrição rígida); V2, neutralidade (nenhum
+termo que antecipe a decisão seguinte, por lista definida a priori); V3,
+fidelidade (nenhuma informação ausente do documento, por leitura); e V4,
+economia do orçamento (proporção dos 512 tokens ocupada por texto constante).
 
 \begin{table}[ht]
 \centering
 \caption{Candidatos de prompt e respectivas estratégias de instrução}
 \label{tab:candidatos}
-\begin{tabular}{|l|p{9.6cm}|}
+\begin{tabularx}{\linewidth}{|l|Y|}
 \hline
 \textbf{Candidato} & \textbf{Estratégia de instrução} \\
 \hline
@@ -392,58 +371,16 @@ seção, com marcação ``Não abordado''. \\
 D --- Extrativo & Pede reprodução literal dos dez trechos mais informativos,
 sem reformulação. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-Nenhum candidato solicita predição da decisão futura, julgamento de postura
-(\textit{hawkish}/\textit{dovish}) ou inferência além do conteúdo do documento.
-Os critérios válidos, todos intrínsecos ao resumo, estão na
-tabela~\ref{tab:criterios}.
-
-\begin{table}[ht]
-\centering
-\caption{Critérios válidos de avaliação e respectiva verificação}
-\label{tab:criterios}
-\begin{tabular}{|l|p{8.4cm}|}
-\hline
-\textbf{Critério} & \textbf{Verificação} \\
-\hline
-V1 --- Orçamento de tokens & Comprimento medido com o tokenizador de destino
-deve ser $\leq$ 512 (restrição rígida) \\
-\hline
-V2 --- Neutralidade & Ausência de termos que antecipem a decisão seguinte, por
-lista definida a priori \\
-\hline
-V3 --- Fidelidade & Ausência de informação não presente no documento original,
-por leitura \\
-\hline
-V4 --- Economia do orçamento & Proporção dos 512 tokens ocupada por texto
-constante sem poder discriminativo \\
-\hline
-\end{tabular}
-\end{table}
-
-A estabilidade entre submissões não foi usada como critério prévio: ela era
-objeto de medição do estudo, e pré-julgá-la anteciparia um resultado ainda não
-apurado. Ela foi medida depois, com o prompt aqui fixado, no experimento da
-seção~\ref{sec:determinismo}.
-
-\subsubsection{Avaliação, revisão crítica e decisão}\label{sec:prompt-avaliacao}
-
-Os candidatos foram submetidos ao modelo \texttt{llama3.1:8b} (Q4\_K\_M, digest
-46e0c10c039e), no servidor da fase de seleção (tabela~\ref{tab:ambiente}), com
+\paragraph{Avaliação.} Os candidatos foram submetidos ao \texttt{llama3.1:8b},
+no servidor da fase de seleção (tabela~\ref{tab:ambiente}), com
 \texttt{temperature = 0}, \texttt{top\_p = 1}, \texttt{num\_predict = 900},
-\texttt{num\_ctx = 16384} e \texttt{seed = 7}; com \texttt{temperature = 0} a
-semente não tem efeito (seção~\ref{sec:mecanismo}). O limite verbal desta
-rodada foi de 350 palavras.
-
-O valor \texttt{num\_ctx = 16384} é o que foi efetivamente usado nesta rodada.
-Verificação posterior mostrou que esse valor trunca parte das atas do recorte
-do estudo, e o Algoritmo 1 usa \texttt{num\_ctx = 32768}
-(seção~\ref{sec:num_ctx}). A seleção não é afetada: a maior ata do conjunto de
-validação tem 20.955 caracteres, cerca de 6.200 tokens, e o truncamento com
-\texttt{num\_ctx = 16384} só ocorre acima de 8.192 tokens, de modo que as onze
-atas foram submetidas íntegras.
+\texttt{num\_ctx = 16384} e limite de 350 palavras
+(tabela~\ref{tab:prompt_resultados}). O \texttt{num\_ctx} desta rodada trunca
+parte das atas do corpus do estudo (seção~\ref{sec:num_ctx}), mas não as de
+validação, que têm no máximo 20.955 caracteres, cerca de 6.200 tokens.
 
 \begin{table}[ht]
 \centering
@@ -466,132 +403,34 @@ D --- Extrativo & 506 / 427 / 552 & não (2/3) & 6 / 6 / 5 de 7 & nenhum \\
 \end{tabular}
 \end{table}
 
-D foi eliminado por V1: produziu 552 tokens na ata 279, violando a restrição
-rígida. A eliminação é definitiva e independe dos demais critérios. A, B e C
-satisfizeram V1, V2 e V3 nas três atas
-(tabela~\ref{tab:prompt_resultados}). Com base na cobertura temática de 7/7, o
-candidato C foi inicialmente selecionado. Essa decisão foi revertida, pelos
-motivos a seguir.
+\paragraph{Decisão.} D foi eliminado por V1: produziu 552 tokens na ata 279. A,
+B e C satisfizeram V1, V2 e V3 nas três atas, e C foi selecionado de início pela
+cobertura temática de 7/7. A escolha foi revertida por três motivos: o critério
+de cobertura é circular, porque a lista dos sete temas foi definida pelo
+pesquisador e C enumera esses temas no próprio prompt; nomear temas, como fazem
+B e C, injeta uma hipótese do pesquisador sobre o que é relevante, e uma
+eventual melhora sobre o \textit{baseline} deixaria de ser atribuível à
+sumarização; e o gabarito de C gasta o orçamento com texto constante (cerca de
+22 tokens de cabeçalhos por resumo, mais 12 a 24 marcadores, contra V4), com uma
+marcação ``Não abordado'' que poderia aparecer de forma desigual antes e depois
+de 2016.
+\textbf{Prompt selecionado: candidato A (neutro).} Ele isola a variável em
+estudo, gera de 258 a 358 tokens e produz prosa contínua, sem cabeçalhos. A
+sumarização guiada por domínio, com C, fica como extensão futura
+(seção~\ref{sec:limitacoes}).
 
-\paragraph{Circularidade do critério de cobertura.} A lista dos sete temas
-usada para medir cobertura foi definida pelo próprio pesquisador, e o
-candidato C enumera explicitamente seções que correspondem a esses temas. C
-obtém pontuação máxima em uma métrica cuja definição ele já contém: o
-resultado 7/7 decorre da formulação do prompt, não de superioridade. A coluna
-de cobertura da tabela~\ref{tab:prompt_resultados} é, portanto, sem valor
-discriminativo, e a decisão que nela se baseou fica sem sustentação.
+\paragraph{Limite de palavras.} A tokenização WordPiece fragmenta palavras, e a
+razão entre tokens e palavras medida nos resumos gerados foi, em média, 1,37 em
+português e 1,42 em inglês, com pior caso de 1,48 numa ata inglesa de 2013. Dos
+512 tokens, 510 são úteis, e o limite seguro é 510 / 1,48 $\approx$ 344
+palavras. O limite foi reduzido de 350 para 300 palavras: 300 $\times$ 1,48 = 444
+tokens, com 66 de folga. A garantia de R3 vem da medição de cada resumo no
+Algoritmo 1 e do corte na ingestão (seção~\ref{sec:decisoes}).
 
-\paragraph{Confundimento entre o efeito estudado e o conhecimento do
-pesquisador.} Este é o problema de maior consequência. O objetivo da pesquisa
-é verificar se resumos são preditores melhores do que as atas truncadas por
-\textit{head+tail}; a variável sob investigação é a sumarização. Ao nomear
-cinco seções temáticas, C injeta no pipeline uma hipótese do pesquisador sobre
-quais aspectos da ata são relevantes. Se o pipeline com C superasse o
-\textit{baseline}, dois mecanismos ficariam indistinguíveis: a sumarização
-preservou informação que o truncamento descartava, ou o pesquisador indicou ao
-modelo onde estava a informação relevante. Como o segundo não é a variável em
-estudo, C introduz um confundidor que compromete a interpretação causal. Não se
-trata de vazamento de rótulo: o alvo provém da reunião seguinte, à qual o LLM
-não tem acesso. O problema é de seleção de atributos feita pelo pesquisador.
-
-\paragraph{Artefatos estruturais.} Nos resumos de C, cerca de 22 tokens por
-resumo são cabeçalhos idênticos em todas as atas, sem poder discriminativo,
-somados a 12 a 24 marcadores de formatação --- consumo improdutivo de um
-orçamento escasso (V4). Além disso, a marcação ``Não abordado'' não disparou
-nas três atas testadas, todas posteriores a 2016 e de formato padronizado. As
-atas de 2002 a 2015 têm estrutura substancialmente diferente, o que torna
-plausível que a marcação apareça de forma assimétrica entre períodos. Como
-\texttt{before\_2016} e \texttt{after\_2016} são fatores experimentais do
-estudo, isso poderia produzir um efeito de período originado no gabarito do
-prompt, e não no conteúdo das atas.
-
-\paragraph{Relação com R2.} A seleção não observou métricas de classificação,
-de modo que não houve violação literal de R2. Contudo, selecionar por aderência
-a temas que o pesquisador julga relevantes opera na mesma direção que R2
-pretende bloquear. A reversão alinha o procedimento também ao espírito da
-restrição.
-
-\paragraph{Decisão final.} \textbf{Prompt selecionado: candidato A (neutro)},
-com justificativa apoiada apenas em critérios válidos:
-
-\begin{itemize}
-\item Isola a variável em estudo. Não nomeia temas nem impõe gabarito. A única
-  instrução além de resumir é a cláusula de fidelidade, que restringe o que o
-  modelo pode inventar sem direcionar o que ele deve selecionar. Uma eventual
-  diferença em relação ao \textit{baseline} torna-se atribuível à sumarização.
-\item Satisfaz a restrição rígida com folga: 258 a 358 tokens, contra 352 a 417
-  de C.
-\item Não produz artefatos estruturais. Gera prosa contínua, sem cabeçalhos
-  constantes nem marcação condicional sujeita a variação entre períodos.
-\item A desvantagem aparente de cobertura era artefato do critério inválido. O
-  resumo produzido por A para a ata 274 cobre espontaneamente ambiente externo,
-  atividade, inflação, expectativas, balanço de riscos e a decisão corrente, sem
-  que nada disso tenha sido solicitado.
-\item B é descartado pelo mesmo argumento do confundimento, por consistência.
-\end{itemize}
-
-C não é descartado como objeto de pesquisa, apenas como prompt desta rodada. A
-pergunta ``sumarização guiada por domínio supera sumarização genérica?'' é
-legítima, mas distinta, e exigiria o prompt neutro como controle próprio ---
-dobrando o custo experimental, dado que uma repetição de \textit{holdout}
-consumiu cerca de 18 horas no trabalho base. Fica registrada como extensão
-futura.
-
-\subsubsection{Calibração do limite de palavras}\label{sec:prompt-calibracao}
-
-O limite de palavras é instrumento para atender R3 e foi calibrado
-empiricamente. A tokenização WordPiece fragmenta palavras em subunidades, de
-modo que a conversão palavra$\rightarrow$token não é unitária; vocabulário
-técnico-financeiro e valores como ``15,00\%'' fragmentam-se especialmente.
-
-\begin{table}[ht]
-\centering
-\caption{Razão token/palavra medida nos resumos gerados}
-\label{tab:razao}
-\begin{tabular}{|l|r|r|r|}
-\hline
-\textbf{Conjunto} & \textbf{Palavras} & \textbf{Tokens} & \textbf{Razão} \\
-\hline
-PT --- ata 270 & 258 & 358 & 1,39 \\
-\hline
-PT --- ata 274 & 195 & 258 & 1,32 \\
-\hline
-PT --- ata 279 & 243 & 338 & 1,39 \\
-\hline
-EN --- ata 2025-01-29 & 270 & 370 & 1,37 \\
-\hline
-EN --- ata 2020-02-05 & 254 & 355 & 1,40 \\
-\hline
-EN --- ata 2013-10-09 & 332 & 493 & 1,48 \\
-\hline
-\end{tabular}
-\end{table}
-
-A média é 1,37 em português e 1,42 em inglês, e o pior caso, 1,48, ocorre na
-ata inglesa de 2013 (tabela~\ref{tab:razao}), o que é consistente com a
-hipótese de que atas mais antigas têm linguagem mais densa.
-
-Dos 512 tokens, 510 são úteis ([CLS] e [SEP] consomem dois). Aplicando a pior
-razão, o limite seguro é 510 / 1,48 $\approx$ 344 palavras. As 350 palavras da
-primeira rodada estão acima dessa margem: 350 $\times$ 1,48 = 518 tokens. O
-limite não foi violado nas execuções apenas porque o modelo subentregou ---
-solicitadas 350 palavras, produziu de 195 a 332. Isso é comportamento
-observado, não garantia, e a pior razão foi registrada justamente em ata
-antiga, sendo que o recorte do estudo começa em 2002.
-
-O limite foi reduzido para 300 palavras: 300 $\times$ 1,48 = 444 tokens, com 66
-tokens de folga. A garantia de R3, no entanto, é dada pela medição do
-comprimento real de cada resumo com o tokenizador de destino, no Algoritmo 1
-(seção~\ref{sec:alg1}, passos 10 e 11), e pelo corte dos que excedem o limite,
-na ingestão pelo Algoritmo 2 (função~\ref{fn:ingerir}).
-
-\subsubsection{Prompt fixado}\label{sec:prompt-fixado}
-
-Os prompts abaixo são imutáveis para o restante da pesquisa; a implementação
-confere o SHA-256 do prompt e para se ele mudar. Alteração posterior exige nova
-versão deste relatório, com justificativa e reexecução das etapas afetadas. O
-marcador \texttt{\{m\}} é substituído pelo texto completo e limpo da ata que
-está sendo resumida --- o documento inteiro, nunca um fragmento dele.
+\paragraph{Prompt fixado.} Os prompts abaixo são imutáveis para o restante da
+pesquisa; a implementação confere o SHA-256 do prompt e para se ele mudar. O
+marcador \texttt{\{m\}} é substituído pelo texto completo e limpo da ata, nunca
+por um fragmento. A versão inglesa é tradução literal da portuguesa.
 
 \noindent\textbf{Português} (\texttt{Prompt\_pt})
 \begin{lstlisting}
@@ -617,192 +456,99 @@ Document:
 Summary:
 \end{lstlisting}
 
-A versão inglesa é tradução literal da portuguesa, preservando a estrutura de
-duas orações --- instrução de resumo com limite de extensão, seguida da cláusula
-de fidelidade ---, de modo que a diferença entre os pipelines PT e EN se
-restrinja ao idioma e ao modelo de destino.
-
-\subsubsection{Limitações da escolha}\label{sec:prompt-limitacoes}
-
-Nenhuma das limitações abaixo é eliminável pela escolha do prompt:
-
-\begin{itemize}
-\item A API do Banco Central não expõe as versões em inglês das atas
-  posteriores a março de 2025. A verificação do prompt inglês restringiu-se à
-  conformidade com o orçamento de tokens, em atas do recorte base. Como é
-  verificação puramente técnica e não participou da seleção --- decidida em
-  atas portuguesas fora do recorte ---, não há contaminação da escolha;
-  permanece a limitação de que a qualidade do resumo inglês não foi avaliada em
-  dados disjuntos.
-\item A literatura reporta erros de fidelidade em LLMs aplicados a
-  sumarização~\cite{kim2024}. As atas são bem mais curtas que os textos ali
-  avaliados, o que atenua o problema, mas a fidelidade não é garantida e foi
-  verificada apenas por leitura de amostra.
-\item O modelo produziu consistentemente menos que o limite solicitado, o que é
-  favorável quanto a R3, mas significa que o limite verbal não controla com
-  precisão a extensão do resumo.
-\item A seleção apoiou-se em três atas. As oito restantes do conjunto de
-  validação não foram usadas para verificar o prompt fixado, nem antes nem
-  depois da geração do corpus.
-\end{itemize}
-
-\subsubsection{Registro de decisões}\label{sec:prompt-decisoes}
-
-\begin{table}[ht]
-\centering
-\caption{Registro das decisões tomadas no processo de escolha do prompt}
-\label{tab:decisoes}
-\begin{tabular}{|l|p{4.2cm}|p{4.6cm}|l|}
-\hline
-\textbf{\#} & \textbf{Decisão} & \textbf{Fundamento} & \textbf{Status} \\
-\hline
-D1 & Conjunto de validação = atas 270--280 (pós-mar/2025) & Disjunção do recorte
-base, evita vazamento & Vigente \\
-\hline
-D2 & Eliminação do candidato D & Violou o limite de 512 tokens (552 na ata 279)
-& Vigente \\
-\hline
-D3 & Seleção do candidato C & Cobertura temática 7/7 & Revertida \\
-\hline
-D4 & Invalidação do critério de cobertura temática & Circular: mede o que o
-próprio prompt enuncia & Vigente \\
-\hline
-D5 & Eliminação de C e B & Confundem sumarização com seleção de atributos pelo
-pesquisador & Vigente \\
-\hline
-D6 & Seleção do candidato A (neutro) & Isola a variável em estudo; satisfaz V1 a
-V4 & Vigente \\
-\hline
-D7 & Limite verbal reduzido de 350 para 300 palavras & 350 $\times$ 1,48 = 518
-$>$ 510 tokens úteis & Vigente \\
-\hline
-D8 & C registrado como extensão futura & Pergunta legítima, mas distinta; custo
-dobrado & Vigente \\
-\hline
-\end{tabular}
-\end{table}
-
-As decisões estão na tabela~\ref{tab:decisoes}.
-
 \subsection{Experimento de determinismo}\label{sec:determinismo}
 
-Esta subseção relata o experimento que verificou se submissões repetidas de uma
-mesma ata ao modelo sumarizador produzem resumos diferentes, e que fixou o
-número de submissões por ata usado pelo Algoritmo 1. O experimento foi feito
-uma vez, antes de gerar o corpus, para a combinação de servidor e modelo da
-tabela~\ref{tab:ambiente}. Ele não é parte do Algoritmo 1 e não é repetido a
-cada execução dele.
+Este experimento, feito uma vez antes de gerar o corpus, fixou o número de
+submissões por ata usado pelo Algoritmo 1. Não é parte do algoritmo nem é
+repetido a cada execução dele.
 
 \subsubsection{Motivação e critério de decisão}\label{sec:det-motivacao}
 
 O projeto previa submeter cada ata várias vezes ao mesmo prompt para medir a
-variação das respostas. A primeira versão do Algoritmo 1 fixava, por isso,
-\texttt{N\_sub = 10} submissões independentes por ata, e comparava os dez
-resumos de cada ata par a par sobre o corpus inteiro. Por determinação do
-orientador, esse número passou a ser decidido a partir de evidência, antes de
-gerar o corpus.
-
-O critério de decisão foi definido antes da execução: submeter dez atas dez
-vezes cada e observar se os resumos de uma mesma ata saem idênticos, caractere
+variação das respostas, e a primeira versão do Algoritmo 1 fixava, por isso,
+\texttt{N\_sub = 10} submissões por ata. Por determinação do orientador, esse
+número passou a ser decidido por evidência, antes de gerar o corpus, com
+critério definido antes da execução: submeter dez atas dez vezes cada, nos dois
+idiomas, e observar se os resumos de uma mesma ata saem idênticos, caractere
 por caractere. Saindo idênticos, a repetição não carrega informação e passa-se
-a uma submissão por ata. Saindo diferentes, a repetição se mantém, com dez
-submissões por ata. A decisão usa identidade exata, e não um limiar de
-similaridade: a identidade não exige escolher uma tolerância, e as similaridades
-servem para medir quanto as submissões se afastam quando diferem. O experimento
-cobre os dois idiomas, porque a conclusão vale para os dois corpora e a
-comparação entre eles é um dos eixos do estudo.
-
-Medir a variabilidade real do sumarizador exigiria \texttt{temperature} $> 0$,
-o que foi descartado por decisão do orientador: elevar a temperatura aumenta o
-risco de o modelo acrescentar informação ausente do documento, contrariando a
-restrição de fidelidade que orienta a escolha do prompt
-(seção~\ref{sec:prompt}).
+a uma submissão por ata; saindo diferentes, mantêm-se dez. Medir a
+variabilidade com \texttt{temperature} $> 0$ foi descartado pelo orientador,
+porque aumenta o risco de o modelo acrescentar informação ausente da ata.
 
 \subsubsection{Mecanismo}\label{sec:mecanismo}
 
-Esta subseção explica por que o resultado observado não é acidental. Ela
-descreve mecanismos literais da execução do modelo, não analogias.
+\paragraph{Decodificação gulosa e semente.} Em cada passo, a rede devolve um
+\textit{logit} por token do vocabulário, e um procedimento posterior, o
+amostrador, escolhe o próximo token~\cite{holtzman2020}. Com
+\texttt{temperature} $> 0$, o próximo token é sorteado, e a semente determina o
+sorteio. Com \texttt{temperature} $= 0$, o amostrador toma sempre o token de
+maior logit (decodificação gulosa): nenhum número pseudoaleatório é consumido,
+e \textbf{a semente nunca é lida}. Fixar a semente, portanto, não torna uma
+submissão reproduzível; o que a torna reproduzível é o estado de execução do
+servidor.
 
-\paragraph{Decodificação gulosa e o papel da semente.} Um modelo de linguagem
-produz um token por passo. Em cada passo, a rede recebe tudo o que já existe ---
-o prompt mais os tokens gerados até ali --- e devolve um vetor de
-\textit{logits}: um número real por token do vocabulário, medindo o quanto
-aquele token é plausível como próximo. O vocabulário do Llama 3.1 tem cerca de
-128 mil entradas, logo são cerca de 128 mil logits por passo. A rede é uma
-função determinística: a mesma sequência de entrada devolve sempre o mesmo vetor
-de logits. O que decide o próximo token é um procedimento posterior, o
-\textit{amostrador}, e é ali que o acaso pode entrar~\cite{holtzman2020}:
-
-\begin{itemize}
-\item com \texttt{temperature} $> 0$, os logits são convertidos em uma
-  distribuição de probabilidade e o próximo token é sorteado dessa
-  distribuição. O sorteio consome números pseudoaleatórios, e a semente
-  determina quais. Sementes diferentes produzem textos diferentes;
-\item com \texttt{temperature} $= 0$, não há distribuição a sortear. O
-  amostrador degenera em \texttt{argmax}: toma o token de maior logit, sempre.
-  É a \textbf{decodificação gulosa}: em cada passo escolhe-se o candidato
-  localmente melhor, sem sorteio e sem revisão posterior. Nenhum número
-  pseudoaleatório é consumido e \textbf{a semente nunca é lida}.
-\end{itemize}
-
-É a mesma situação de um programa que chama \texttt{random.seed(k)} e depois
-nunca chama \texttt{random()}: o valor de \texttt{k} não tem como influir no
-resultado. Daí a previsão, confirmada pelo experimento, de que submissões com
-sementes distintas produzem o mesmo resumo. Fixar a semente, portanto, não torna
-uma submissão reproduzível; o que a torna reproduzível é o estado de execução
-do servidor, descrito a seguir.
-
-\paragraph{Ponto flutuante: onde a diferença residual nasce.} Cada logit é o
-resultado de milhares de multiplicações e somas em ponto flutuante. A adição em
-ponto flutuante não é associativa~\cite{goldberg1991}: cada soma parcial é
-arredondada para o número representável mais próximo, e o arredondamento
-depende da magnitude dos operandos. Logo $(a + b) + c$ e $a + (b + c)$ podem
-diferir nos últimos bits, como se verifica em qualquer intérprete Python:
-
-\begin{lstlisting}
->>> (0.1 + 0.2) + 0.3  ==  0.1 + (0.2 + 0.3)
-False
-\end{lstlisting}
-
-A ordem dessas somas não é propriedade do modelo; é decisão da implementação.
-Ela depende de como o trabalho foi dividido em blocos para a GPU, e isso depende
-de quantos tokens são processados naquela passada. Processar um prompt de 13 mil
-tokens de uma só vez e processá-lo aproveitando uma parte já calculada antes
-resultam em agrupamentos diferentes, logo em ordens de soma diferentes, logo em
-logits que diferem nos últimos bits. Em quase todos os passos isso é
-irrelevante: o token vencedor ganha com folga. O problema aparece no passo em
-que os dois primeiros candidatos estão quase empatados. Ali uma diferença
-mínima inverte o \texttt{argmax}, um token diferente é escolhido, e esse token
-entra na entrada do passo seguinte. A partir daí os dois textos seguem
-trajetórias distintas, porque passaram a ter históricos diferentes. Isso explica
-o padrão observado: a diferença é rara, é tudo ou nada e, quando ocorre, pode se
-propagar por todo o resto do resumo.
-
-\paragraph{Por que a primeira submissão é a diferente.} O servidor Ollama mantém
-em memória o resultado do processamento do último prompt (o cache de prefixo),
-para não recalcular o que já calculou. Quando as submissões de uma ata são
-feitas em sequência, a primeira encontra no cache o prompt da ata anterior e
-precisa processar o texto novo; as seguintes encontram no cache o prompt
-idêntico e reaproveitam quase todo o trabalho. São dois caminhos de execução
-distintos. Limpar o estado do servidor antes de cada chamada faz todas as
-chamadas seguirem o mesmo caminho.
+\paragraph{Ponto flutuante e cache de prefixo.} A adição em ponto flutuante não
+é associativa~\cite{goldberg1991}, e a ordem das somas que produzem cada logit
+depende de quantos tokens são processados de uma vez. O servidor Ollama guarda
+o processamento do último prompt (o cache de prefixo). Quando as submissões de
+uma ata são feitas em sequência, a primeira encontra no cache o prompt da ata
+anterior e processa o texto do zero; as seguintes reaproveitam o prompt
+idêntico. São dois caminhos de execução, com logits que diferem nos últimos
+bits. Quando os dois primeiros candidatos estão quase empatados, essa diferença
+inverte a escolha do token, e os dois textos seguem caminhos distintos dali em
+diante. Limpar o estado do servidor antes de cada chamada faz todas as chamadas
+seguirem o mesmo caminho.
 
 \subsubsection{Procedimento do teste}\label{sec:det-procedimento}
 
-O teste é o procedimento~\ref{proc:teste}. Ele recebe as atas dos dois idiomas
-(seção~\ref{sec:dados}), os prompts fixados (seção~\ref{sec:prompt-fixado}), o
-modelo sumarizador com os seus parâmetros, o tamanho da amostra \texttt{K}, o
-número de submissões por ata \texttt{N\_test}, a semente base \texttt{S0} e o
-passo \texttt{P} entre sementes, o modelo de embeddings \texttt{Emb}, a tabela
-\texttt{Metricas}, que associa cada nome de métrica à função que a calcula
-(\texttt{lexical}, \texttt{SimilaridadeLexical}; \texttt{rougeL},
-\texttt{SimilaridadeRougeL}; \texttt{embedding}, \texttt{SimilaridadeEmbedding}),
-e o número \texttt{N\_sub\_max} de submissões por ata que o corpus teria se o
-teste encontrasse variação. Ele devolve a decisão \texttt{N\_sub}, o número de
-resumos distintos de cada ata da amostra e as similaridades entre as
-submissões, com as suas estatísticas. Os resumos do teste são gravados em
-arquivo próprio e nunca entram no corpus. Os passos são:
+O teste chama as sub-rotinas abaixo: \texttt{LimparEstado}, que o Algoritmo 1
+também usa, a amostragem das atas e as três similaridades da tabela
+\texttt{Metricas}, que recebem dois resumos da mesma ata e valem 1 para textos
+idênticos. A implementação está em
+\caminho{ic_exploracao/algoritmo1/determinismo.py} e
+\caminho{ic_exploracao/algoritmo1/analisar_variancia.py}, no repositório do
+projeto~\cite{delpiccolo2026}.
 
+\begin{itemize}
+\item \texttt{LimparEstado}: pede ao servidor que descarregue o modelo (no
+  Ollama, uma requisição com \texttt{keep\_alive = 0} e sem prompt), consulta a
+  lista de modelos residentes (\texttt{GET /api/ps}) até ela ficar vazia, por
+  até 30 s, e interrompe a execução se o modelo continuar residente, porque
+  seguir misturaria dois estados do servidor. Ao retornar, o cache de prefixo
+  está vazio.
+\item \texttt{AmostraPorComprimento(D, K)}: ordena as atas de \texttt{D} pelo
+  número de caracteres, com empate desfeito pela data, e devolve as datas das
+  posições $\mathrm{round}(i \cdot (n - 1)/(K - 1))$, para
+  $i = 0, \ldots, K - 1$, contadas a partir de 0, sendo $n$ o número de atas. É
+  aplicada a \texttt{D\_pt}, e as mesmas reuniões são usadas em inglês.
+\item \texttt{SimilaridadeLexical} (métrica \texttt{lexical}): índice de
+  Jaccard~\cite{jaccard1912} entre os conjuntos de palavras dos dois resumos,
+  depois de dobrar o texto para ASCII (forma NFKD), passá-lo para minúsculas e
+  trocar por espaço o que não é letra ou dígito; vale 0 se a união for vazia.
+\item \texttt{SimilaridadeRougeL} (métrica \texttt{rougeL}): ROUGE-L na
+  variante F1~\cite{lin2004}, a média harmônica da precisão e da revocação da
+  maior subsequência comum entre as sequências de palavras, pela mesma
+  transformação.
+\item \texttt{SimilaridadeEmbedding} (métrica \texttt{embedding}): cosseno
+  entre os embeddings de sentença dos dois textos literais, pela média das
+  saídas de \texttt{Emb}~\cite{reimers2019}, que é fixo e nunca é retreinado.
+\item \texttt{RelatarSimilaridades(Sim, lang)}: para cada métrica, o mínimo, os
+  três quartis (interpolação linear), o máximo, a amplitude interquartil, a
+  média e o desvio padrão (\texttt{ddof = 1}), no geral, por ata, por ano e por
+  recorte temporal.
+\end{itemize}
+
+O teste é o procedimento~\ref{proc:teste}. Ele recebe as atas dos dois idiomas,
+os prompts fixados, o modelo sumarizador com os seus parâmetros, o tamanho da
+amostra \texttt{K}, o número de submissões por ata \texttt{N\_test}, a semente
+base \texttt{S0} e o passo \texttt{P} entre sementes, o modelo de embeddings
+\texttt{Emb}, a tabela \texttt{Metricas}, que associa cada nome de métrica à
+função que a calcula (lista acima), e o número \texttt{N\_sub\_max}
+de submissões por ata que o corpus teria se o teste encontrasse variação. Ele
+devolve a decisão \texttt{N\_sub}, o número de resumos distintos de cada ata da
+amostra e as similaridades entre as submissões, com as suas estatísticas. Os
+resumos do teste são gravados em arquivo próprio e nunca entram no corpus. Os
+passos são:
 % PROSA proc:teste
 \begin{enumerate}
 \item \texttt{Identicas} recebe verdadeiro; ela indica se todas as submissões
@@ -838,16 +584,16 @@ arquivo próprio e nunca entram no corpus. Os passos são:
 \KwIn{\texttt{Idiomas} = \{pt, en\}; \texttt{D\_pt}, \texttt{D\_en}: atas limpas
   (seção~\ref{sec:dados})\\
   \texttt{Prompt\_pt}, \texttt{Prompt\_en}: prompts fixados
-  (seção~\ref{sec:prompt-fixado}); o marcador \texttt{\{m\}} é substituído
+  (seção~\ref{sec:prompt}); o marcador \texttt{\{m\}} é substituído
   pelo texto completo e limpo da ata \texttt{m}, nunca por um fragmento\\
   \texttt{LLM}: \texttt{llama3.1:8b}, Q4\_K\_M, digest 46e0c10c039e, no Ollama;
   \texttt{temperature = 0}, \texttt{top\_p = 1}, \texttt{num\_predict = 900},
   \texttt{num\_ctx = 32768}\\
   \texttt{K} = 10: atas da amostra; \texttt{N\_test} = 10: submissões por ata\\
   \texttt{S0} = 42 e \texttt{P} = 9973: semente base e passo entre sementes\\
-  \texttt{Emb}: \texttt{paraphrase-multilingual-MiniLM-L12-v2}~\cite{reimers2019}\\
-  \texttt{Metricas}: \texttt{lexical}, \texttt{rougeL} e \texttt{embedding}, com
-  as suas funções\\
+  \texttt{Emb}: \texttt{paraphrase-multilingual-MiniLM-L12-v2}\\
+  \texttt{Metricas}: \texttt{lexical}, \texttt{rougeL} e \texttt{embedding}
+  (seção~\ref{sec:det-procedimento})\\
   \texttt{N\_sub\_max} = 10: submissões por ata se houver variação}
 \KwOut{\texttt{N\_sub}; \texttt{Identicas}; \texttt{Distintos[lang][m]};
   \texttt{Sim[nome][lang][m][a][b]} e as suas estatísticas}
@@ -902,257 +648,23 @@ arquivo próprio e nunca entram no corpus. Os passos são:
   \texttt{N\_sub\_max}}
 \end{procedure}
 
-O procedimento~\ref{proc:limpar} deixa o servidor sem nada no cache de prefixo,
-para que a chamada seguinte ao \texttt{LLM} carregue o modelo de novo e processe
-o prompt do zero, como qualquer outra chamada feita depois dele. O estado é
-verificado, e não presumido: se a limpeza falhar, a execução para, em vez de
-seguir num estado misto. O Algoritmo 1 usa o mesmo procedimento. Os passos são:
-
-% PROSA proc:limpar
-\begin{enumerate}
-\item Pedir ao servidor que descarregue o modelo: no Ollama, uma requisição com
-  \texttt{keep\_alive = 0} e sem prompt.
-\item Consultar a lista de modelos residentes (\texttt{GET /api/ps}) até ela
-  ficar vazia, por até 30 s.
-\item Se o modelo continuar residente, interromper a execução, porque seguir
-  misturaria dois estados do servidor.
-\end{enumerate}
-
-\begin{procedure}[H]
-\caption{LimparEstado()}\label{proc:limpar}
-\KwIn{o servidor Ollama e o modelo \texttt{llama3.1:8b} do \texttt{LLM}}
-\KwOut{nenhuma; ao retornar, o modelo não está na memória do servidor}
-\tcp{Pedir ao servidor que descarregue o modelo: no Ollama, uma requisição com
-  \texttt{keep\_alive = 0} e sem prompt.}
-pedir a descarga do modelo\;
-\tcp{Consultar a lista de modelos residentes (\texttt{GET /api/ps}) até ela
-  ficar vazia, por até 30 s.}
-consultar os modelos residentes até a lista ficar vazia, por até 30 s\;
-\tcp{Se o modelo continuar residente, interromper a execução, porque seguir
-  misturaria dois estados do servidor.}
-\lIf{o modelo continua residente}{interromper a execução}
-\end{procedure}
-
-A função~\ref{fn:amostra} recebe um conjunto de atas \texttt{D} e o tamanho
-\texttt{K} da amostra e devolve as datas de \texttt{K} reuniões em posições
-igualmente espaçadas ao longo da ordem de comprimento, com os dois extremos. O
-comprimento é a variável relevante porque determina o tamanho do prompt, que
-pode mudar o caminho de execução dentro do servidor. A regra é fixada antes de
-qualquer resumo ser observado e é reproduzível. Ela é aplicada a
-\texttt{D\_pt}, e as mesmas reuniões são usadas em inglês, para que os dois
-idiomas sejam comparados sobre os mesmos documentos. Os passos são:
-
-% PROSA fn:amostra
-\begin{enumerate}
-\item \texttt{L} recebe as atas de \texttt{D} ordenadas pelo número de
-  caracteres do texto, com empate desfeito pela data de referência.
-\item \texttt{Amostra} recebe as datas de referência das atas de \texttt{L} nas
-  posições $\mathrm{round}(i \cdot (|L| - 1)/(K - 1))$, para
-  $i = 0, 1, \ldots, K - 1$, contadas a partir de 0.
-\item Devolver \texttt{Amostra}.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{AmostraPorComprimento(D, K)}\label{fn:amostra}
-\KwIn{\texttt{D}: conjunto de atas, cada uma com texto e data de referência;
-  \texttt{K}: tamanho da amostra}
-\KwOut{\texttt{Amostra}: datas de referência de \texttt{K} reuniões}
-\tcp{\texttt{L} recebe as atas de \texttt{D} ordenadas pelo número de
-  caracteres do texto, com empate desfeito pela data de referência.}
-\texttt{L} $\gets$ \texttt{D} ordenado por comprimento do texto e, no empate,
-por data\;
-\tcp{\texttt{Amostra} recebe as datas de referência das atas de \texttt{L} nas
-  posições $\mathrm{round}(i \cdot (|L| - 1)/(K - 1))$, para
-  $i = 0, 1, \ldots, K - 1$, contadas a partir de 0.}
-\texttt{Amostra} $\gets$ \{data de $L[\mathrm{round}(i \cdot (|L| - 1)/(K - 1))]$ :
-$i = 0, \ldots, K - 1$\}\;
-\tcp{Devolver \texttt{Amostra}.}
-\KwRet{\texttt{Amostra}}\;
-\end{function}
-
-A função~\ref{fn:lexical} é o índice de Jaccard~\cite{jaccard1912} entre os
-conjuntos de palavras de dois resumos: vale 1 com vocabulários idênticos e 0
-com vocabulários disjuntos, e ignora a ordem das palavras. O texto é dobrado
-para ASCII antes da comparação porque o modelo restaura os acentos ao escrever,
-embora as atas de entrada sejam ASCII (seção~\ref{sec:comprimento}); a
-transformação é a mesma para os dois textos do par e não enviesa a comparação.
-Os passos são:
-
-% PROSA fn:lexical
-\begin{enumerate}
-\item \texttt{X} recebe o conjunto de palavras de \texttt{x}, depois de dobrar
-  o texto para ASCII (forma NFKD, descartando o que não é ASCII), passá-lo para
-  minúsculas e trocar por espaço tudo o que não é letra ou dígito.
-\item \texttt{Y} recebe o conjunto de palavras de \texttt{y}, pela mesma
-  transformação.
-\item Se a união de \texttt{X} e \texttt{Y} for vazia, devolver 0.
-\item Devolver o tamanho da interseção de \texttt{X} e \texttt{Y} dividido pelo
-  tamanho da união.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{SimilaridadeLexical(x, y)}\label{fn:lexical}
-\KwIn{\texttt{x}, \texttt{y}: dois resumos}
-\KwOut{índice de Jaccard entre 0 e 1}
-\tcp{\texttt{X} recebe o conjunto de palavras de \texttt{x}, depois de dobrar
-  o texto para ASCII (forma NFKD, descartando o que não é ASCII), passá-lo para
-  minúsculas e trocar por espaço tudo o que não é letra ou dígito.}
-\texttt{X} $\gets$ conjunto de palavras de \texttt{x}, em ASCII, minúsculas, sem
-pontuação\;
-\tcp{\texttt{Y} recebe o conjunto de palavras de \texttt{y}, pela mesma
-  transformação.}
-\texttt{Y} $\gets$ conjunto de palavras de \texttt{y}, pela mesma
-transformação\;
-\tcp{Se a união de \texttt{X} e \texttt{Y} for vazia, devolver 0.}
-\lIf{$X \cup Y = \emptyset$}{\KwRet{0}}
-\tcp{Devolver o tamanho da interseção de \texttt{X} e \texttt{Y} dividido pelo
-  tamanho da união.}
-\KwRet{$|X \cap Y| \,/\, |X \cup Y|$}\;
-\end{function}
-
-A função~\ref{fn:rougel} é o ROUGE-L na variante F1~\cite{lin2004}, calculado
-sobre a maior subsequência comum de palavras; ao contrário da medida léxica, é
-sensível à ordem das palavras. Os passos são:
-
-% PROSA fn:rougel
-\begin{enumerate}
-\item \texttt{Xs} e \texttt{Ys} recebem as sequências de palavras de \texttt{x}
-  e de \texttt{y}, na ordem do texto, pela transformação de
-  \texttt{SimilaridadeLexical}.
-\item Se \texttt{Xs} ou \texttt{Ys} for vazia, devolver 0.
-\item \texttt{l} recebe o comprimento da maior subsequência comum de
-  \texttt{Xs} e \texttt{Ys}.
-\item \texttt{prec} recebe \texttt{l} dividido pelo comprimento de \texttt{Xs},
-  e \texttt{rev}, \texttt{l} dividido pelo comprimento de \texttt{Ys}: são a
-  precisão e a revocação.
-\item Se \texttt{prec} e \texttt{rev} somarem 0, devolver 0; senão, devolver a
-  média harmônica das duas, que é o F1.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{SimilaridadeRougeL(x, y)}\label{fn:rougel}
-\KwIn{\texttt{x}, \texttt{y}: dois resumos}
-\KwOut{ROUGE-L F1 entre 0 e 1}
-\tcp{\texttt{Xs} e \texttt{Ys} recebem as sequências de palavras de \texttt{x}
-  e de \texttt{y}, na ordem do texto, pela transformação de
-  \texttt{SimilaridadeLexical}.}
-\texttt{Xs} $\gets$ sequência de palavras de \texttt{x};
-\texttt{Ys} $\gets$ sequência de palavras de \texttt{y}\;
-\tcp{Se \texttt{Xs} ou \texttt{Ys} for vazia, devolver 0.}
-\lIf{\texttt{Xs} ou \texttt{Ys} vazia}{\KwRet{0}}
-\tcp{\texttt{l} recebe o comprimento da maior subsequência comum de
-  \texttt{Xs} e \texttt{Ys}.}
-\texttt{l} $\gets$ comprimento da maior subsequência comum de \texttt{Xs} e
-\texttt{Ys}\;
-\tcp{\texttt{prec} recebe \texttt{l} dividido pelo comprimento de \texttt{Xs},
-  e \texttt{rev}, \texttt{l} dividido pelo comprimento de \texttt{Ys}: são a
-  precisão e a revocação.}
-\texttt{prec} $\gets$ \texttt{l} / $|$\texttt{Xs}$|$;
-\texttt{rev} $\gets$ \texttt{l} / $|$\texttt{Ys}$|$\;
-\tcp{Se \texttt{prec} e \texttt{rev} somarem 0, devolver 0; senão, devolver a
-  média harmônica das duas, que é o F1.}
-\leIf{\texttt{prec} + \texttt{rev} = 0}{\KwRet{0}}{\KwRet{2 $\cdot$
-  \texttt{prec} $\cdot$ \texttt{rev} / (\texttt{prec} + \texttt{rev})}}
-\end{function}
-
-A função~\ref{fn:embedding} é o cosseno entre os embeddings de sentença de dois
-resumos, calculados pelo modelo \texttt{Emb}~\cite{reimers2019}, que é fixo em
-todo o estudo e nunca é retreinado. Ela capta a concordância de sentido quando
-as palavras diferem, o que as duas medidas anteriores não detectam. Recebe o
-texto literal, sem dobramento, porque \texttt{Emb} é multilíngue e trata os
-acentos. O valor vai de $-1$ a 1 e, com este modelo, fica na prática entre 0 e
-1. Os passos são:
-
-% PROSA fn:embedding
-\begin{enumerate}
-\item \texttt{u} recebe \texttt{Emb(x)} e \texttt{v} recebe \texttt{Emb(y)}:
-  são os embeddings de sentença dos dois textos literais, pela média das saídas
-  do codificador.
-\item Se \texttt{u} ou \texttt{v} tiver norma 0, devolver 0.
-\item Devolver o cosseno entre \texttt{u} e \texttt{v}: o produto interno
-  dividido pelo produto das normas.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{SimilaridadeEmbedding(x, y)}\label{fn:embedding}
-\KwIn{\texttt{x}, \texttt{y}: dois resumos; \texttt{Emb}: modelo de embeddings
-  da entrada do procedimento~\ref{proc:teste}}
-\KwOut{cosseno entre $-1$ e 1}
-\tcp{\texttt{u} recebe \texttt{Emb(x)} e \texttt{v} recebe \texttt{Emb(y)}:
-  são os embeddings de sentença dos dois textos literais, pela média das saídas
-  do codificador.}
-\texttt{u} $\gets$ \texttt{Emb(x)}; \texttt{v} $\gets$ \texttt{Emb(y)}\;
-\tcp{Se \texttt{u} ou \texttt{v} tiver norma 0, devolver 0.}
-\lIf{$\|u\| = 0$ ou $\|v\| = 0$}{\KwRet{0}}
-\tcp{Devolver o cosseno entre \texttt{u} e \texttt{v}: o produto interno
-  dividido pelo produto das normas.}
-\KwRet{$(u \cdot v) \,/\, (\|u\| \, \|v\|)$}\;
-\end{function}
-
-A função~\ref{fn:relatar} resume a distribuição de cada métrica com as
-estatísticas de um boxplot, mais a média e o desvio. As comparações são sempre
-dentro de uma ata: nenhum par mistura resumos de atas diferentes. Os passos
-são:
-
-% PROSA fn:relatar
-\begin{enumerate}
-\item Para cada métrica \texttt{nome} de \texttt{Metricas}.
-\item Para cada nível de agregação dos pares do idioma: todos juntos, por ata,
-  por ano e por período (\texttt{before\_2016}, \texttt{after\_2016} e
-  \texttt{full}, com corte em 2016-01-01).
-\item Calcular sobre os valores de \texttt{Sim[nome][lang]} do nível o mínimo,
-  os três quartis, o máximo, a amplitude interquartil, a média e o desvio
-  padrão, com quartis por interpolação linear e desvio com \texttt{ddof = 1}.
-\item Devolver a tabela das estatísticas, que é gravada no relatório do teste.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{RelatarSimilaridades(Sim, lang)}\label{fn:relatar}
-\KwIn{\texttt{Sim}: similaridades do procedimento~\ref{proc:teste};
-  \texttt{lang}: idioma}
-\KwOut{tabela de estatísticas por métrica e nível de agregação}
-\tcp{Para cada métrica \texttt{nome} de \texttt{Metricas}.}
-\ForEach{métrica \texttt{nome} de \texttt{Metricas}}{
-  \tcp{Para cada nível de agregação dos pares do idioma: todos juntos, por ata,
-    por ano e por período (\texttt{before\_2016}, \texttt{after\_2016} e
-    \texttt{full}, com corte em 2016-01-01).}
-  \ForEach{nível: geral, por ata, por ano, por período}{
-    \tcp{Calcular sobre os valores de \texttt{Sim[nome][lang]} do nível o
-      mínimo, os três quartis, o máximo, a amplitude interquartil, a média e o
-      desvio padrão, com quartis por interpolação linear e desvio com
-      \texttt{ddof = 1}.}
-    calcular as oito estatísticas sobre \texttt{Sim[nome][lang]} no nível\;
-  }
-}
-\tcp{Devolver a tabela das estatísticas, que é gravada no relatório do teste.}
-\KwRet{a tabela das estatísticas}\;
-\end{function}
-
-\textbf{Nota (pode ser ignorada).} As três similaridades são declaradas em uma
-tabela, e o procedimento~\ref{proc:teste} percorre essa tabela. Acrescentar ou
-remover uma métrica é mudar a entrada \texttt{Metricas}, sem tocar no corpo do
-procedimento. As três funções recebem os mesmos argumentos \texttt{(x, y)}.
-
 \subsubsection{Execuções e resultados}\label{sec:det-resultados}
 
-O procedimento~\ref{proc:teste} foi executado duas vezes sobre a mesma
-amostra, com os mesmos prompts, parâmetros e sementes
-(tabela~\ref{tab:det_execucoes}). A amostra cobre atas de 5.807 a 67.477
-caracteres e, com o \texttt{num\_ctx} adaptativo descrito na
-seção~\ref{sec:desvios}, os três patamares de \texttt{num\_ctx} em português e
-dois em inglês. A primeira execução foi feita sem o passo 6 (limpar o estado):
-as dez submissões de cada ata em sequência, com o modelo residente, de modo que
-o servidor reaproveitava o cache de prefixo entre as chamadas. Foi ela que
-revelou a dependência do estado do cache e levou a incluir a limpeza no
-procedimento. A segunda execução seguiu o procedimento como especificado. As
-duas atas do piloto da primeira execução (pt 20021014 e pt 20081210) foram
-geradas antes, na versão do piloto (tabela~\ref{tab:ambiente}).
+O procedimento~\ref{proc:teste} foi executado duas vezes sobre a mesma amostra,
+com os mesmos prompts, parâmetros e sementes (tabela~\ref{tab:det_execucoes}).
+A amostra cobre atas de 5.807 a 67.477 caracteres e, com o \texttt{num\_ctx}
+adaptativo da seção~\ref{sec:desvios}, os três patamares de \texttt{num\_ctx} em
+português e dois em inglês. A primeira execução foi feita sem o passo 6
+(limpar o estado): as dez submissões de cada ata em sequência, com o modelo
+residente. Foi ela que revelou a dependência do estado do cache e levou a
+incluir a limpeza no procedimento. A segunda execução seguiu o procedimento como
+especificado.
 
 \begin{table}[ht]
 \centering
 \caption{As duas execuções do teste de determinismo}
 \label{tab:det_execucoes}
-\begin{tabular}{|l|p{4.7cm}|p{4.7cm}|}
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{3.4cm}|Y|Y|}
 \hline
  & \textbf{Primeira execução (sem limpar o estado)} &
 \textbf{Segunda execução (estado limpo)} \\
@@ -1172,270 +684,91 @@ Tempo de processamento & 2,5 h & 7,9 h (5,1 h PT, 2,7 h EN) \\
 \hline
 Tempo por chamada & --- & mediana 128 s, mínimo 28 s, máximo 330 s \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-\paragraph{Primeira execução.} Nas três combinações que variaram, o padrão foi
-sempre o mesmo: a submissão $j = 1$ diferiu, e as submissões $j = 2$ a $j = 10$
-foram idênticas entre si, caractere por caractere. Nunca houve agrupamento
-disperso. Esse padrão já é evidência contra a semente: as nove submissões
-idênticas usam nove sementes diferentes, e, se a semente agisse, elas
-divergiriam entre si.
+\paragraph{Primeira execução e replicação controlada.} Nas três combinações que
+variaram, a submissão $j = 1$ diferiu, e as submissões $j = 2$ a $j = 10$ foram
+idênticas entre si. Esse padrão já é evidência contra a semente: as nove
+submissões idênticas usam nove sementes diferentes. Para isolar a causa, a
+submissão $j = 1$ de cada caso foi refeita com a mesma semente, duas vezes
+seguidas: com o modelo recém-carregado, a chamada reproduziu $j = 1$; com o
+prompt idêntico já no cache, reproduziu $j = 2$ a $j = 10$, nos três casos. O
+estado do cache determina a saída; a semente, não. A diferença vai de uma frase
+reescrita (pt 20230920, Jaccard de 0,9925) a um resumo substancialmente outro
+(en 20110720, Jaccard de 0,3818). Os textos divergentes estão no repositório do
+projeto, em \caminho{ic_exploracao/resumos/determinismo_padrao_en.jsonl} e no
+arquivo equivalente em português.
 
-\paragraph{Replicação controlada.} Para isolar a causa, a submissão $j = 1$ de
-cada caso foi refeita com a mesma semente, duas vezes seguidas, variando apenas
-o estado do cache: a primeira chamada com o modelo recém-carregado (fria), a
-segunda com o prompt idêntico já residente (quente).
-
-\begin{table}[ht]
-\centering
-\caption{Mesma semente, duas saídas, determinadas pelo estado do cache}
-\label{tab:replicacao}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Caso} & \textbf{Chamada fria} & \textbf{Chamada quente} \\
-\hline
-pt 20230920 & reproduziu $j = 1$ & reproduziu $j = 2..10$ \\
-\hline
-en 20070606 & reproduziu $j = 1$ & reproduziu $j = 2..10$ \\
-\hline
-en 20110720 & reproduziu $j = 1$ & reproduziu $j = 2..10$ \\
-\hline
-\end{tabular}
-\end{table}
-
-Foram três casos e três acertos, nos dois sentidos
-(tabela~\ref{tab:replicacao}): com a semente constante a saída mudou, e com a
-semente variada (entre $j = 2$ e $j = 10$) a saída não mudou. O estado do cache
-determina a saída; a semente, não.
-
-\paragraph{Em quanto diferem.} Quando diferem, a magnitude vai de uma frase
-reescrita a um resumo substancialmente outro (tabela~\ref{tab:magnitude}).
-
-\begin{table}[ht]
-\centering
-\caption{Similaridade entre a submissão $j = 1$ e as submissões $j = 2$ a
-$j = 10$ na primeira execução}
-\label{tab:magnitude}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-\textbf{Caso} & \textbf{Jaccard} & \textbf{ROUGE-L} & \textbf{Cosseno} &
-\textbf{Palavras} & \textbf{Divergem a partir de} \\
-\hline
-pt 20230920 & 0,9925 & 0,9801 & 1,0000 & 250 vs 246 & 85,6\% do texto \\
-\hline
-en 20070606 & 0,9494 & 0,9533 & 0,9932 & 306 vs 321 & 23,2\% do texto \\
-\hline
-en 20110720 & 0,3818 & 0,4509 & 0,8546 & 282 vs 393 & 0,0\% do texto \\
-\hline
-\end{tabular}
-\end{table}
-
-Nos três casos, os 36 pares que comparam duas submissões entre $j = 2$ e
-$j = 10$ valem exatamente 1,0 nas três métricas; só os 9 pares que envolvem
-$j = 1$ ficam abaixo de 1. No caso brando (pt 20230920) muda o sujeito de uma
-frase; no severo (en 20110720) as duas variantes adotam formatos diferentes. Os
-textos estão no Apêndice~\ref{ap:divergentes}.
-
-\paragraph{Segunda execução.} A replicação controlada mostrou que a variação
-da primeira execução acompanha o estado do cache. Restava saber se, removida
-essa assimetria, ainda sobraria alguma variação; se sobrasse, a causa seria um
-não determinismo do próprio hardware entre uma carga do modelo e a seguinte,
-que nenhum protocolo eliminaria. Com o estado limpo antes de cada chamada, as
-dez submissões de cada combinação produziram um único resumo, idêntico
-caractere por caractere, nas vinte combinações; as três que haviam variado
-deixaram de variar. As similaridades par a par, sobre os 450 pares de cada
-idioma, foram:
-
-\begin{lstlisting}
-metrica    lang   n    minimo        mediana  maximo  IQR      desvio
-embedding  en    450  0.9999999579    1.0     1.0    5.2e-08  3.4e-08
-embedding  pt    450  0.9999999305    1.0     1.0    7.4e-08  4.5e-08
-lexical    en    450  1.0000000000    1.0     1.0    0.0      0.0
-lexical    pt    450  1.0000000000    1.0     1.0    0.0      0.0
-rougeL     en    450  1.0000000000    1.0     1.0    0.0      0.0
-rougeL     pt    450  1.0000000000    1.0     1.0    0.0      0.0
-\end{lstlisting}
-
-Jaccard e ROUGE-L valem exatamente 1,0 em todos os pares, como se espera de
-textos idênticos. O cosseno difere de 1 apenas na sétima casa decimal, por
-arredondamento da precisão simples (\texttt{float32}) no cálculo do cosseno de
-um vetor consigo mesmo, e não por diferença de conteúdo.
-
-\paragraph{Qual variante o estado limpo reproduz.} O resumo produzido em estado
-limpo foi comparado com os da primeira execução:
-
-\begin{itemize}
-\item nas 20 combinações, ele é idêntico à submissão $j = 1$ da primeira
-  execução;
-\item nas 17 combinações que não haviam variado, ele é, por consequência,
-  idêntico também às submissões $j = 2$ a $j = 10$;
-\item nas 3 combinações que haviam variado, ele reproduz a variante de $j = 1$
-  e difere da variante de $j = 2$ a $j = 10$.
-\end{itemize}
-
-Isso fecha a explicação da primeira execução. A primeira submissão de cada ata
-segue o mesmo caminho de execução de uma chamada em estado limpo: processa o
-texto da ata do zero, porque o que está no cache é o prompt de outra ata. As
-nove seguintes reaproveitam o prompt idêntico já processado. A variante
-divergente era a das submissões que reaproveitavam o cache, e não a primeira.
-
-\paragraph{Conclusão.} Removida a assimetria de cache, a variância do
-sumarizador é exatamente zero na amostra. Não sobra resíduo a atribuir a não
-determinismo de hardware entre cargas do modelo: com \texttt{temperature = 0} e
-estado de execução uniforme, o sumarizador é uma função determinística da ata.
-
-\paragraph{Custo.} A segunda execução levou cerca de 3,2 vezes o tempo da
-primeira (tabela~\ref{tab:det_execucoes}), porque cada chamada recarrega o
-modelo e processa o prompt inteiro, sem reaproveitar cálculo anterior.
+\paragraph{Segunda execução.} Com o estado limpo antes de cada chamada, as dez
+submissões de cada combinação produziram um único resumo, idêntico caractere
+por caractere, nas vinte combinações. Jaccard e ROUGE-L valem exatamente 1,0
+nos 450 pares de cada idioma; o cosseno difere de 1 só na sétima casa decimal,
+por arredondamento da precisão simples (\texttt{float32}). Nas 20 combinações, o
+resumo em estado limpo é idêntico à submissão $j = 1$ da primeira execução: a
+primeira submissão de cada ata segue o caminho de uma chamada em estado limpo,
+e a variante divergente era a das submissões que reaproveitavam o cache. Com
+\texttt{temperature = 0} e estado de execução uniforme, o sumarizador é uma
+função determinística da ata.
 
 \subsubsection{Equivalência entre a primeira chamada e o estado
 limpo}\label{sec:equivalencia}
 
-\paragraph{Versões do servidor.} O aplicativo do Ollama se atualiza sozinho, e
-isso ocorreu durante o estudo, contrariando a restrição de manter o servidor
-fixo. As versões efetivamente usadas no experimento
-(tabela~\ref{tab:ambiente}) foram verificadas depois, pelo campo de versão
-gravado em cada resumo e pelo horário de partida do processo do servidor. A
-versão da segunda execução não foi gravada nos registros daquela execução e foi
-estabelecida pelo horário de partida do processo: a versão 0.40.5 foi instalada
-em 16/10/2026, às 12h27, e o processo iniciado então seguiu no ar, sem
-reinício, durante toda a segunda execução. O modelo foi o mesmo em todas as
-fases.
-
-A mudança de versão entre as duas execuções não compromete a conclusão. A
-segunda execução, que fundamenta a decisão, foi feita inteira numa única
-versão, e o resultado dela não depende de comparação com a primeira. Além
-disso, a comparação entre versões reforça a explicação: o resumo produzido em
-estado limpo na versão 0.40.5 é idêntico, nas 20 combinações, ao da submissão
-$j = 1$ gerada nas versões 0.34.2 e 0.35.1. Nesta amostra, a troca de versão do
-servidor não alterou nenhum resumo.
-
-\paragraph{Verificação na versão 0.40.5.} Restava a equivalência, dentro da
-versão 0.40.5, entre a primeira chamada de uma ata e uma chamada em estado
-limpo, demonstrada antes apenas na 0.35.1. Ela foi testada nas três
-combinações sensíveis, reproduzindo a condição exata do corpus: o estado é
-limpo, a ata que precedeu a alvo na geração é chamada no mesmo patamar de
-\texttt{num\_ctx}, e em seguida a ata-alvo é chamada duas vezes
-(tabela~\ref{tab:verif_versao}).
-
-\begin{table}[ht]
-\centering
-\caption{Verificação na versão 0.40.5}
-\label{tab:verif_versao}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Caso} & \textbf{Primeira chamada} & \textbf{Segunda chamada} \\
-\hline
-pt 20230920 & = estado limpo & = variante quente da 0.35.1 \\
-\hline
-en 20070606 & = estado limpo & = variante quente da 0.35.1 \\
-\hline
-en 20110720 & = estado limpo & = variante quente da 0.35.1 \\
-\hline
-\end{tabular}
-\end{table}
-
-Os dois resultados importam. A primeira chamada reproduziu o estado limpo nos
-três casos, de modo que o corpus gerado na 0.40.5 segue o caminho equivalente
-ao da segunda execução. E a segunda chamada reproduziu, caractere por
-caractere, a variante que reaproveita o cache observada na 0.35.1: o mecanismo
-da seção~\ref{sec:mecanismo} não é particularidade de uma versão.
-
-\paragraph{Reprodutibilidade do corpus.} Com uma submissão por ata, cada ata do
-corpus é submetida uma única vez, e essa submissão é sempre a primeira daquela
-ata: o cache contém o prompt da ata anterior, nunca o da própria. Esse é o
-caminho das submissões $j = 1$ da primeira execução, que a segunda mostrou
-coincidir com o estado limpo nas 20 combinações. O resumo que o corpus registra
-para cada ata é, portanto, o mesmo que uma chamada em estado limpo produz, e
-pode ser reproduzido por quem repetir a chamada nesse estado, sem depender da
-ordem em que as atas foram processadas. Gerar o corpus inteiro em estado limpo
-não é necessário para obter essa propriedade e custaria mais tempo, pelo motivo
-do custo da segunda execução (seção~\ref{sec:det-resultados}). A propriedade só
-se perderia se uma chamada encontrasse no cache parte do prompt da própria ata,
-o que acontece se a geração for interrompida no meio de uma ata e retomada; por
-isso o Algoritmo 1 limpa o estado na partida e antes de cada nova tentativa de
-uma chamada que falhou (seção~\ref{sec:alg1}, passos 1 e 9).
+O Ollama se atualizou sozinho durante o estudo (tabela~\ref{tab:ambiente}). A
+segunda execução foi feita inteira na versão 0.40.5, estabelecida pelo horário
+de partida do processo do servidor (instalação em 16/10/2026, às 12h27, sem
+reinício até o fim da execução), e o resumo em estado limpo nessa versão é
+idêntico, nas 20 combinações, ao da submissão $j = 1$ gerada nas versões 0.34.2
+e 0.35.1. Na 0.40.5, a equivalência entre a primeira chamada de uma ata e o
+estado limpo foi verificada nas três combinações sensíveis, chamando antes a ata
+que precedeu a alvo na geração do corpus: a primeira chamada reproduziu o estado
+limpo nos três casos, e uma segunda chamada reproduziu a variante que
+reaproveita o cache observada na 0.35.1. Como cada ata do corpus é submetida
+uma única vez, encontrando no cache o prompt de outra ata, o resumo que o corpus
+registra é o que uma chamada em estado limpo produz. Isso só deixaria de valer
+se a geração fosse interrompida no meio de uma ata e retomada; por isso o
+Algoritmo 1 limpa o estado na partida e antes de cada nova tentativa (passos 1
+e 9).
 
 \subsubsection{Decisão e limitação}\label{sec:det-decisao}
 
-\paragraph{O que dez submissões por ata entregariam.} Na condição da primeira
-execução, com uma submissão fria e nove quentes, dos 45 pares de cada ata 36
-comparam duas submissões quentes e valem 1,0 por construção. Apenas 9 pares
-carregam alguma informação, e os nove repetem a mesma comparação: $j = 1$
-contra o resumo único das demais. A análise de variância rodada sobre as 20
-combinações da primeira execução confirma:
+\textbf{Decisão:} \textbf{\texttt{N\_sub = 1}}, uma submissão por ata, saída do
+procedimento~\ref{proc:teste} na segunda execução. A repetição não mede
+variabilidade do modelo: a semente é inerte com \texttt{temperature = 0}, a
+diferença da primeira execução é artefato do cache do servidor e, removido o
+artefato, a variância é zero. A decisão foi estabelecida uma vez, para a
+combinação de servidor e modelo da tabela~\ref{tab:ambiente}; o Algoritmo 1 a
+recebe como entrada e não testa o determinismo. Com uma submissão por ata, a
+análise de variância sobre o corpus, prevista na primeira versão do algoritmo,
+perdeu o objeto e não foi executada.
 
-\begin{lstlisting}
-metrica    lang   n    minimo    Q1  mediana   Q3  maximo  IQR     media
-embedding  en    450  0.854562  1.0     1.0   1.0     1.0  0.0  0.996955
-embedding  pt    450  1.000000  1.0     1.0   1.0     1.0  0.0  1.000000
-lexical    en    450  0.381818  1.0     1.0   1.0     1.0  0.0  0.986625
-lexical    pt    450  0.992537  1.0     1.0   1.0     1.0  0.0  0.999851
-rougeL     en    450  0.450867  1.0     1.0   1.0     1.0  0.0  0.988083
-rougeL     pt    450  0.980080  1.0     1.0   1.0     1.0  0.0  0.999602
-\end{lstlisting}
+\textbf{Limitação:} a equivalência foi verificada nas 20 combinações da amostra,
+e não nas 202 atas de cada idioma, e depende do servidor, da versão do Ollama e
+do modelo (\texttt{llama3.1:8b}, digest 46e0c10c039e). Se algum deles mudar, a
+verificação precisa ser refeita (\texttt{determinismo.py --verificar-versao});
+por isso a versão do servidor e o digest do modelo são gravados em cada resumo.
 
-A amplitude interquartil é nula, e o primeiro quartil, a mediana, o terceiro
-quartil e o máximo valem todos 1,0, nas três métricas e nos dois idiomas. O
-boxplot é uma linha em 1,0 com alguns pontos fora. O $n = 45$ por ata sugere uma
-amostra de 45 observações que não existe: há, no máximo, duas saídas distintas.
-Na condição de estado limpo da segunda execução não há sequer os pontos fora:
-os 45 pares de todas as atas valem 1,0, e a distribuição se reduz a um único
-valor.
+\section{Sumarização automática}\label{sec:sumarizacao}
 
-\paragraph{Decisão.} O número de submissões por ata passa de 10 para 1. A
-repetição não é informativa: ela não mede variabilidade do modelo, porque a
-semente é inerte com \texttt{temperature = 0} (seção~\ref{sec:mecanismo}); a
-diferença que aparece na primeira execução é artefato do reaproveitamento de
-cache do servidor; e, removido esse artefato, a variância é exatamente zero
-(seção~\ref{sec:det-resultados}). A decisão é a saída do
-procedimento~\ref{proc:teste} na segunda execução: \textbf{\texttt{N\_sub = 1}},
-uma chamada por ata. É esse o valor que o Algoritmo 1 recebe como entrada
-(seção~\ref{sec:alg1}).
-
-A conclusão foi estabelecida uma vez, para a combinação de servidor e modelo
-da tabela~\ref{tab:ambiente}, e não é refeita a cada execução do Algoritmo 1. O
-Algoritmo 1 não testa o determinismo: o passo em que ele confere a versão do
-servidor só interrompe a geração se o servidor mudar.
-
-\paragraph{Limitação declarada.} A equivalência entre a primeira submissão de
-uma ata e uma chamada em estado limpo foi verificada nas 20 combinações da
-amostra, que cobrem a faixa de comprimento e os patamares de \texttt{num\_ctx}
-descritos na seção~\ref{sec:det-resultados}, e não em todas as 202 atas de cada
-idioma. Ela depende ainda do servidor, da versão do Ollama e do modelo
-(\texttt{llama3.1:8b}, digest 46e0c10c039e): uma mudança em qualquer um deles
-altera o caminho de execução e pode alterar a saída. Se o servidor ou o modelo
-mudarem, a verificação precisa ser refeita (\texttt{determinismo.py
---verificar-versao}, Apêndice~\ref{ap:artefatos}). Por isso a versão do servidor
-e o digest do modelo são gravados em cada resumo do corpus.
-
-\paragraph{Análise de variância sobre o corpus.} A primeira versão do Algoritmo
-1 previa comparar par a par as submissões de cada ata sobre o corpus inteiro, e
-a especificação anterior a este relatório a mantinha como passo condicional,
-executado só com mais de uma submissão por ata. Com uma submissão por ata, essa
-análise perdeu o objeto: não há pares a comparar. Ela não faz parte do
-Algoritmo 1 e não foi executada.
-
-\section{Algoritmo 1: sumarização das atas}\label{sec:alg1}
+\subsection{Metodologia}\label{sec:alg1}
 
 O Algoritmo 1 resume cada ata do corpus, nos dois idiomas, com o modelo
-sumarizador e o prompt fixados na seção~\ref{sec:exploratoria}, e mede o
+sumarizador e o prompt fixados na seção~\ref{sec:estudos}, e mede o
 comprimento de cada resumo no tokenizador do classificador de destino. Esta
-seção diz como reproduzi-lo; a seção~\ref{sec:res-alg1} relata o que a execução
+subseção diz como reproduzi-lo; a seção~\ref{sec:res-alg1} relata o que a execução
 produziu. O algoritmo é independente do Algoritmo 2, que recebe a sua saída como
 dado.
 
 O algoritmo recebe as atas dos dois idiomas (seção~\ref{sec:dados}), os prompts
-fixados (seção~\ref{sec:prompt-fixado}), o modelo sumarizador com os seus
+fixados (seção~\ref{sec:prompt}), o modelo sumarizador com os seus
 parâmetros, o número de submissões por ata \texttt{N\_sub}, o limite de entrada
 do classificador \texttt{L\_max} e as sementes. \texttt{N\_sub} vale 1: é a
 conclusão do experimento de determinismo (seção~\ref{sec:det-decisao}), válida
 para o servidor e o modelo da tabela~\ref{tab:ambiente}. O algoritmo continua
 escrito para qualquer valor de \texttt{N\_sub}. Ele devolve a tabela
 \texttt{Resumo}, com o texto literal de cada resumo, e, para cada idioma, a
-lista \texttt{Acima} dos resumos que passam de \texttt{L\_max} tokens. Os passos
-são:
+lista \texttt{Acima} dos resumos que passam de \texttt{L\_max} tokens. A sub-rotina
+\texttt{LimparEstado} está definida na seção~\ref{sec:det-procedimento}. Os passos são:
 
 % PROSA alg:sumarizacao
 \begin{enumerate}
@@ -1472,7 +805,7 @@ são:
 \KwIn{\texttt{Idiomas} = \{pt, en\}; \texttt{D\_pt}, \texttt{D\_en}: atas limpas
   (seção~\ref{sec:dados})\\
   \texttt{Prompt\_pt}, \texttt{Prompt\_en}: prompts fixados
-  (seção~\ref{sec:prompt-fixado}); o marcador \texttt{\{m\}} é substituído
+  (seção~\ref{sec:prompt}); o marcador \texttt{\{m\}} é substituído
   pelo texto completo e limpo da ata \texttt{m}, nunca por um fragmento\\
   \texttt{LLM}: \texttt{llama3.1:8b}~\cite{grattafiori2024}, Q4\_K\_M, digest
   46e0c10c039e, no Ollama; \texttt{temperature = 0}, \texttt{top\_p = 1},
@@ -1531,74 +864,49 @@ são:
 }
 \end{algorithm}
 
-\paragraph{Notas do Algoritmo 1.} As notas abaixo trazem só justificativa e
-histórico; o algoritmo pode ser reproduzido sem elas.
+\paragraph{Notas do Algoritmo 1.} As notas trazem só justificativa; o
+algoritmo pode ser reproduzido sem elas.
 
 {\renewcommand{\theenumi}{\roman{enumi}}
 \renewcommand{\labelenumi}{(\theenumi)}
 \begin{enumerate}
-\item\label{nota:sementes} \textbf{Espaçamento das sementes.} O uso de
-  \texttt{s\_j = S0 + P}$\cdot$\texttt{j} em vez de \texttt{s\_j = j} responde
-  a um risco documentado em simulação estocástica replicada: sementes
-  consecutivas podem inicializar estados vizinhos e produzir fluxos
-  correlacionados, problema tratado na literatura de \textit{bad seeds} em
-  geração paralela de números aleatórios~\cite{savage,knuth1997,lecuyer2002}. A
-  escolha de \texttt{P} primo não decorre de teorema: serve para garantir que o
-  passo seja coprimo com qualquer módulo adotado internamente pelo gerador,
-  evitando que a progressão aritmética caia em ciclo curto de resíduos. Os
-  geradores modernos já embaralham a inicialização, de modo que se trata de
-  precaução de custo nulo, não de necessidade demonstrada. Com
-  \texttt{temperature = 0} a semente nem chega a ser lida
-  (seção~\ref{sec:mecanismo}), e o risco é inexistente; a precaução volta a ter
-  efeito se a temperatura for elevada. A redação original desta nota afirmava
-  que fixar a semente tornava cada submissão exatamente reproduzível; a
-  afirmação é falsa nesta configuração, pelo mesmo motivo.
-\item\label{nota:acima} \textbf{Por que os resumos acima de \texttt{L\_max} não
-  são regerados.} Regerar exigiria mudar o prompt ou a semente, ambos fixos; e
-  reamostrar só os casos acima do limite seria reamostragem condicional, que
+\item \textbf{Sementes.} As sementes são espaçadas por um passo \texttt{P} primo,
+  precaução contra fluxos pseudoaleatórios correlacionados~\cite{lecuyer2002}
+  que só teria efeito com \texttt{temperature} $> 0$
+  (seção~\ref{sec:mecanismo}).
+\item \textbf{Resumos acima de \texttt{L\_max}.} Regerar exigiria mudar o
+  prompt ou a semente, ambos fixos, e reamostrar só os casos acima do limite
   enviesaria a distribuição de comprimento para resumos mais curtos. O limite é
-  imposto depois, na ingestão pelo Algoritmo 2 (função~\ref{fn:ingerir}), e a
-  lista \texttt{Acima} é relatada para que a frequência e a magnitude dos cortes
-  sejam conhecidas.
-\item\label{nota:limpeza} \textbf{Por que o estado só é limpo com mais de uma
-  submissão por ata, na partida e antes de cada nova tentativa.} Com
-  \texttt{N\_sub = 1}, cada ata é submetida uma única vez, e essa submissão
-  encontra no cache o prompt de outra ata, nunca o da própria; esse caminho
-  equivale ao estado limpo (seção~\ref{sec:equivalencia}). Limpar o estado
-  antes de cada chamada também garantiria a condição, a um custo maior. A
-  limpeza na partida e antes de cada nova tentativa evita que uma ata
-  interrompida no meio do processamento deixe parte do próprio prompt no cache.
-  A versão do servidor é conferida porque a equivalência vale para uma
-  combinação específica de servidor e modelo.
-\item\label{nota:historico} \textbf{Histórico.} Na primeira versão deste
-  algoritmo, \texttt{N\_sub = 10} era fixo, e as dez submissões de cada ata
-  eram comparadas par a par sobre o corpus inteiro
-  (seção~\ref{sec:det-motivacao}). A especificação anterior a este relatório
-  (\texttt{algoritmo1\_sumarizacao.tex}, v9) tinha três etapas: a etapa A era o
-  teste de determinismo, que decidia \texttt{N\_sub}; a etapa B gerava o
-  corpus; e a etapa C, a análise de variância sobre o corpus, só seria executada
-  com \texttt{N\_sub} $> 1$. Por indicação do orientador, o teste passou a ser
-  uma etapa exploratória anterior ao algoritmo (seção~\ref{sec:determinismo}),
-  \texttt{N\_sub} passou a ser uma entrada, e a análise de variância saiu do
-  algoritmo, porque perdeu o objeto (seção~\ref{sec:det-decisao}).
+  imposto na ingestão pelo Algoritmo 2 (seção~\ref{sec:decisoes}), e a lista
+  \texttt{Acima} mostra a frequência e a magnitude dos cortes.
+\item \textbf{Limpeza do estado.} Com \texttt{N\_sub = 1}, cada submissão
+  encontra no cache o prompt de outra ata, nunca o da própria, caminho que
+  equivale ao estado limpo (seção~\ref{sec:equivalencia}). A limpeza na partida
+  e antes de cada nova tentativa evita que uma ata interrompida deixe parte do
+  próprio prompt no cache, e a versão do servidor é conferida porque a
+  equivalência vale para uma combinação específica de servidor e modelo.
 \end{enumerate}}
 
-\section{Resultados do Algoritmo 1}\label{sec:res-alg1}
+A implementação está em \caminho{ic_exploracao/algoritmo1/gerar_resumos.py},
+no repositório do projeto~\cite{delpiccolo2026}, e os comandos de execução, em
+\caminho{ic_exploracao/algoritmo1/README.md}.
 
-Esta seção relata o que a execução do Algoritmo~\ref{alg:sumarizacao}
-produziu. Todas as contagens foram recalculadas a partir dos arquivos de dados
-listados no Apêndice~\ref{ap:artefatos}.
+\subsection{Resultados}\label{sec:res-alg1}
 
-\subsection{Execução e integridade}\label{sec:corpus-execucao}
+As contagens desta subseção foram recalculadas a partir dos arquivos de dados do
+repositório do projeto~\cite{delpiccolo2026}.
 
-O algoritmo foi executado sobre o corpus inteiro, com uma submissão por ata
-(tabela~\ref{tab:corpus_execucao}).
+\subsubsection{Execução e integridade}\label{sec:corpus-execucao}
+
+O algoritmo foi executado sobre o corpus inteiro (tabela~\ref{tab:corpus_execucao}),
+sem nenhuma ata faltando ou duplicada e com o mesmo prompt (conferido pelo
+SHA-256) e o mesmo modelo (conferido pelo digest) em todos os resumos.
 
 \begin{table}[ht]
 \centering
 \caption{Execução do Algoritmo 1}
 \label{tab:corpus_execucao}
-\begin{tabular}{|l|c|c|}
+\begin{tabularx}{\linewidth}{|Y|c|c|}
 \hline
  & \textbf{PT} & \textbf{EN} \\
 \hline
@@ -1616,63 +924,65 @@ Tempo por resumo (mediana / máximo) & 144 s / 756 s & 157 s / 537 s \\
 \hline
 Tempo de processamento & 10,3 h & 9,4 h \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-A integridade foi conferida sobre o corpus completo: uma única submissão
-($j = 1$) por ata, nenhuma ata faltando ou duplicada, o mesmo prompt (conferido
-pelo SHA-256) e o mesmo modelo (conferido pelo digest) em todos os resumos.
-Nenhum resumo reproduz texto de outra condição experimental: os resumos do
-experimento de determinismo estão em arquivos separados.
+\subsubsection{Comprimento dos resumos}\label{sec:comprimento}
 
-\subsection{Comprimento dos resumos}\label{sec:comprimento}
+O limite de 300 palavras não é respeitado com precisão
+(tabela~\ref{tab:comprimento}): o modelo passa dele em 27,2\% dos resumos em
+português e 46,0\% em inglês. A garantia de comprimento é a medição em tokens
+do Algoritmo 1 (passos 10 e 11). Os resumos em português trazem acentuação (201
+de 202), embora as atas de entrada sejam ASCII: o modelo restaura os acentos ao
+escrever, o que justifica o dobramento para ASCII nas similaridades léxica e
+ROUGE-L (seção~\ref{sec:det-procedimento}).
 
 \begin{table}[ht]
 \centering
-\caption{Comprimento dos resumos}
+\caption{Comprimento dos resumos (Q1 e Q3: primeiro e terceiro quartis)}
 \label{tab:comprimento}
-\begin{tabular}{|l|c|c|}
+\small
+\begin{tabularx}{\linewidth}{|Y|c|c|}
 \hline
  & \textbf{PT} & \textbf{EN} \\
 \hline
-Tokens BERT (mín / Q1 / mediana / Q3 / máx) & 201 / 311 / 362 / 414 / 808 &
-249 / 351 / 389 / 467 / 912 \\
+Tokens BERT: mín. / Q1 / mediana / Q3 / máx. &
+201 / 311 / 362 / 414 / 808 & 249 / 351 / 389 / 467 / 912 \\
 \hline
 Tokens BERT, média & 378 & 421 \\
 \hline
 Palavras, mediana & 268 & 296 \\
 \hline
-Acima das 300 palavras pedidas no prompt & 55 (27,2\%) & 93 (46,0\%) \\
+Acima das 300 palavras pedidas & 55 (27,2\%) & 93 (46,0\%) \\
 \hline
 Compressão em caracteres, mediana & 5,3\% & 6,8\% \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-O limite de 300 palavras não é respeitado com precisão
-(tabela~\ref{tab:comprimento}), o que já fora registrado como limitação da
-escolha do prompt (seção~\ref{sec:prompt-limitacoes}). A garantia de
-comprimento é dada pela medição em tokens do Algoritmo 1 (passos 10 e 11).
+\subsubsection{Resumos acima de \texttt{L\_max}}\label{sec:acima}
 
-Os resumos em português trazem acentuação (201 de 202), embora as atas de
-entrada sejam ASCII puro: o modelo restaura os acentos ao escrever. É isso que
-justifica o dobramento para ASCII nas funções~\ref{fn:lexical}
-e~\ref{fn:rougel}.
-
-\subsection{Resumos acima de \texttt{L\_max}}\label{sec:acima}
+O inglês tem cerca de 2,6 vezes mais resumos acima do limite que o português
+(tabela~\ref{tab:over}). Todos os 51 casos são de atas anteriores a 2016: as
+atas mais antigas são mais longas e produzem resumos mais longos (mediana de 403
+contra 305 tokens em português, e de 428 contra 353 em inglês). O corte na
+ingestão pelo Algoritmo 2 incide, portanto, apenas sobre o recorte
+\texttt{before\_2016}, e com intensidade diferente em cada idioma.
 
 \begin{table}[ht]
 \centering
-\caption{Resumos que excedem 512 tokens (lista \texttt{Acima})}
+\caption{Resumos que excedem 512 tokens (lista \texttt{Acima}; Q1 e Q3: primeiro e
+terceiro quartis)}
 \label{tab:over}
-\begin{tabular}{|l|c|c|}
+\small
+\begin{tabularx}{\linewidth}{|Y|c|c|}
 \hline
  & \textbf{PT} & \textbf{EN} \\
 \hline
 Acima de 512 tokens & 14 de 202 (6,9\%) & 37 de 202 (18,3\%) \\
 \hline
-Excesso (mín / Q1 / mediana / Q3 / máx) & 7 / 54 / 62 / 135 / 296 &
-2 / 28 / 66 / 101 / 400 \\
+Excesso: mín. / Q1 / mediana / Q3 / máx. &
+7 / 54 / 62 / 135 / 296 & 2 / 28 / 66 / 101 / 400 \\
 \hline
 Excesso, média & 94 & 97 \\
 \hline
@@ -1680,21 +990,13 @@ Antes de 2016 & 14 de 129 (10,9\%) & 37 de 129 (28,7\%) \\
 \hline
 A partir de 2016 & 0 de 73 & 0 de 73 \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
-Dois fatos se destacam na tabela~\ref{tab:over}. O inglês tem cerca de 2,6
-vezes mais resumos acima do limite que o português. E todos os 51 casos são de
-atas anteriores a 2016: as atas mais antigas são mais longas e produzem resumos
-mais longos (mediana de 403 contra 305 tokens em português, e de 428 contra 353
-em inglês). O corte na ingestão pelo Algoritmo 2 incide, portanto, apenas sobre
-o recorte \texttt{before\_2016}, e com intensidade diferente em cada idioma.
+\subsubsection{O que o corte do final remove}\label{sec:corte}
 
-\subsection{O que o corte do final remove}\label{sec:corte}
-
-A função~\ref{fn:ingerir} do Algoritmo 2 corta o final: mantém os primeiros 510
-tokens do resumo, mais \texttt{[CLS]} e \texttt{[SEP]}. Nos 51 resumos
-afetados:
+O corte do final mantém os primeiros 510 tokens do resumo, mais \texttt{[CLS]}
+e \texttt{[SEP]} (seção~\ref{sec:decisoes}). Nos 51 resumos afetados:
 
 \begin{itemize}
 \item o corte remove, na mediana, 11\% do resumo, com máximo de 37\% em
@@ -1711,566 +1013,143 @@ afetados:
 A medição é por palavras-chave: indica onde a decisão é mencionada, mas não
 garante que o trecho removido seja redundante.
 
-\subsection{Saídas degeneradas}\label{sec:degeneradas}
+\subsubsection{Saídas degeneradas}\label{sec:degeneradas}
 
-Em duas atas o modelo passou a reproduzir trechos do documento em vez de
-resumi-lo, e só parou no limite \texttt{num\_predict = 900}
-(tabela~\ref{tab:degeneradas}).
+Em duas atas, pt 20030423 (808 tokens BERT, 477 palavras) e en 20110608 (912
+tokens, 582 palavras), o modelo passou a reproduzir trechos do documento em vez
+de resumi-lo e só parou no limite \texttt{num\_predict = 900}. No caso
+português a cópia é visível: o final do resumo está sem acentos, como a ata de
+entrada. Pelo passo 11 do Algoritmo 1, as duas saídas ficam como produzidas e
+são cortadas na ingestão.
 
-\begin{table}[ht]
-\centering
-\caption{Saídas interrompidas pelo limite de geração}
-\label{tab:degeneradas}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Ata} & \textbf{Tokens BERT} & \textbf{Palavras} \\
-\hline
-pt 20030423 & 808 & 477 \\
-\hline
-en 20110608 & 912 & 582 \\
-\hline
-\end{tabular}
-\end{table}
-
-No caso português a cópia é visível: o final do resumo está sem acentos, como a
-ata de entrada. Conforme o passo 11 do Algoritmo 1, as duas saídas ficam como
-produzidas e são cortadas na ingestão.
-
-\subsection{Preâmbulo nos resumos em inglês}\label{sec:preambulo}
+\subsubsection{Preâmbulo nos resumos em inglês}\label{sec:preambulo}
 
 55 dos 202 resumos em inglês (27,2\%) começam por uma frase fixa, sem conteúdo
-da ata, em uma de duas formas, uma longa e uma curta
-(tabela~\ref{tab:preambulo}). As cadeias exatas, \texttt{Pre\_long} e
-\texttt{Pre\_short}, e a diferença entre elas estão na entrada da
-função~\ref{fn:ingerir}. Nenhum resumo em português tem preâmbulo. A tabela
-\texttt{Resumo} mantém o texto literal.
+da ata, em uma de duas formas. Cada forma é uma única linha, com um espaço
+simples entre as palavras; a quebra abaixo é só de diagramação. As duas
+coincidem até ``less'' e diferem no caractere seguinte: vírgula na longa,
+dois-pontos na curta.
 
-\begin{table}[ht]
-\centering
-\caption{Formas do preâmbulo no início dos resumos em inglês}
-\label{tab:preambulo}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Forma} & \textbf{Resumos} & \textbf{Tokens removidos} \\
-\hline
-Longa (\texttt{Pre\_long}) & 18 & 22 \\
-\hline
-Curta (\texttt{Pre\_short}) & 37 & 13 \\
-\hline
-Total & 55 de 202 & \\
-\hline
-\end{tabular}
-\end{table}
+\begin{itemize}
+\item \texttt{Pre\_long}, em 18 resumos, com 22 tokens BERT: \texttt{Here is a
+  summary of the document in 300 words or less, preserving the topics discussed
+  and the assessments presented:}
+\item \texttt{Pre\_short}, em 37 resumos, com 13 tokens BERT: \texttt{Here is a
+  summary of the document in 300 words or less:}
+\end{itemize}
 
-Nos 55 casos a frase abre o texto, sem espaço antes, e é seguida de duas
-quebras de linha e do resumo. A frase não aparece fora do início em nenhum
-resumo, e nenhum outro resumo, nos dois idiomas, começa por ``Here is'' ou
-``Here's''.
+Nos 55 casos a frase abre o texto e é seguida de duas quebras de linha; ela não
+aparece em outra posição, e nenhum resumo em português a tem. Dos 55, 51 são de
+atas anteriores a 2016 (o primeiro é de 18/07/2007 e o último de 08/06/2016). A
+regra de remoção (seção~\ref{sec:decisoes}), aplicada aos dois arquivos do
+corpus sem gravá-los, remove exatamente 55 preâmbulos em inglês (18 da forma
+longa e 37 da curta) e nenhum em português. Depois da remoção, a mediana dos
+resumos em inglês passa de 389 para 378 tokens BERT, e a média, de 421 para 417;
+o máximo continua em 912. Nenhum dos 37 resumos em inglês acima do limite tem
+preâmbulo: a remoção não muda quais resumos são cortados nem quanto se corta de
+cada um.
 
-A regra do passo 1 da função~\ref{fn:ingerir} foi aplicada aos dois arquivos do
-corpus, sem gravá-los: ela remove exatamente 55 preâmbulos em inglês (18 da
-forma longa e 37 da curta) e nenhum em português, e não altera nenhum outro
-resumo. A contagem de tokens usa o tokenizador \texttt{bert-base-cased},
-incluindo \texttt{[CLS]} e \texttt{[SEP]}, como na
-tabela~\ref{tab:comprimento}; recalculada sobre o texto literal, ela reproduz o
-comprimento gravado no corpus nos 202 resumos.
+\subsubsection{Desvios em relação à especificação}\label{sec:desvios}
 
-\begin{table}[ht]
-\centering
-\caption{Tokens BERT dos resumos em inglês antes e depois da remoção do
-preâmbulo}
-\label{tab:tokens_en_preambulo}
-\begin{tabular}{|l|c|c|}
-\hline
- & \textbf{Texto literal} & \textbf{Sem o preâmbulo} \\
-\hline
-Mín / Q1 / mediana / Q3 / máx & 249 / 351 / 389 / 467 / 912 &
-249 / 341 / 378 / 467 / 912 \\
-\hline
-Média & 421 & 417 \\
-\hline
-Mediana nos 55 resumos com preâmbulo & 364 & 349 \\
-\hline
-Acima de 512 tokens & 37 de 202 & 37 de 202, os mesmos \\
-\hline
-\end{tabular}
-\end{table}
+\textbf{Versões do servidor.} Por causa da atualização automática do Ollama
+(seção~\ref{sec:equivalencia}), o corpus mistura três versões: em português, 14
+resumos em 0.34.2, 8 em 0.35.1 e 180 em 0.40.5; em inglês, 10 em 0.35.1 e 192
+em 0.40.5, sempre com o mesmo modelo. Os 32 resumos das versões antigas incluem
+os 20 da amostra do experimento de determinismo, idênticos aos da 0.40.5; os
+outros 12, todos em português, não têm essa contraprova. Desde 20/10/2026 a
+geração confere a versão antes de cada chamada e para se ela mudar (passo 7).
+\textbf{\texttt{num\_ctx} adaptativo.} Em vez do valor único da entrada
+\texttt{LLM}, cada ata usou o menor patamar de \{8192, 16384, 32768\} que a
+acomodasse sem truncar, no corpus e no experimento de determinismo, depois de
+medido que o resumo sai idêntico nos três patamares; nenhuma ata exigiu
+elevação de patamar (tabela~\ref{tab:corpus_execucao}).
 
-Nenhum dos 37 resumos em inglês acima do limite tem preâmbulo
-(tabela~\ref{tab:tokens_en_preambulo}). A remoção, portanto, não muda quais
-resumos são cortados no passo 3 da função~\ref{fn:ingerir} nem quanto se corta
-de cada um. O máximo continua em 912 tokens, o da saída degenerada en 20110608.
-Dos 55 resumos com preâmbulo, 51 são de atas anteriores a 2016 (o primeiro é de
-18/07/2007 e o último de 08/06/2016).
-
-\subsection{Desvios em relação à especificação}\label{sec:desvios}
-
-\begin{enumerate}
-\item \textbf{Versões do servidor.} Por causa da atualização automática do
-  Ollama (seção~\ref{sec:equivalencia}), o corpus mistura três versões: em
-  português, 14 resumos em 0.34.2, 8 em 0.35.1 e 180 em 0.40.5; em inglês, 10
-  em 0.35.1 e 192 em 0.40.5. O modelo foi o mesmo em todos. Os 32 resumos das
-  versões antigas incluem os 20 da amostra do experimento de determinismo, que
-  são idênticos aos da versão 0.40.5 (seção~\ref{sec:equivalencia}); os outros
-  12, todos em português, não têm essa contraprova direta. Desde 20/10/2026 a
-  geração confere a versão do servidor antes de cada chamada e para se ela
-  mudar (passo 7 do Algoritmo 1).
-\item \textbf{\texttt{num\_ctx} adaptativo.} Em vez do valor único da entrada
-  \texttt{LLM}, cada ata usou o menor patamar de \{8192, 16384, 32768\} que a
-  acomodasse sem truncar, tanto no corpus quanto no experimento de
-  determinismo. Antes da adoção, mediu-se que o resumo sai idêntico nos três
-  patamares; a ausência de truncamento foi conferida em cada ata, e nenhuma
-  exigiu elevação de patamar (tabela~\ref{tab:corpus_execucao}).
-\end{enumerate}
-
-\subsection{Decisões tomadas com o orientador}\label{sec:decisoes}
+\subsubsection{Decisões tomadas com o orientador}\label{sec:decisoes}
 
 Três pontos foram enviados ao orientador em 20/10/2026, cada um com uma
 proposta. As três propostas foram aprovadas, e as respostas foram registradas em
-02/11/2026.
+02/11/2026. As duas últimas definem a ingestão dos resumos pelo Algoritmo 2.
 
-\subsubsection{Correção do \texttt{num\_ctx}}\label{sec:num_ctx}
+\paragraph{Correção do \texttt{num\_ctx}.}\label{sec:num_ctx} A primeira versão
+da entrada \texttt{LLM} do Algoritmo 1 declarava \texttt{num\_ctx = 16384}. O
+Ollama não recusa um prompt maior que \texttt{num\_ctx}: processa apenas
+\texttt{num\_ctx / 2} tokens e descarta o resto, sem aviso. Na maior ata
+portuguesa do corpus (67.477 caracteres), o campo \texttt{prompt\_eval\_count}
+mostrou 4.098 tokens processados com \texttt{num\_ctx = 8192}, 8.194 com
+\texttt{16384} e os 19.945 do documento com \texttt{32768}. Com
+\texttt{num\_ctx = 16384}, 49 das 202 atas portuguesas (24,3\%) seriam
+truncadas e nenhuma das inglesas, porque o português gera mais tokens por
+caractere (3,38 caracteres por token, contra 4,57 em inglês), o que confundiria
+a comparação entre idiomas. Com \texttt{32768}, nenhuma ata é truncada, e o
+modelo usa cerca de 9~GB de memória. \textbf{Proposta:} manter a correção.
+\textbf{Resposta do orientador:} aprovada (``OK''). O valor está na entrada
+\texttt{LLM} do Algoritmo~\ref{alg:sumarizacao}.
 
-A primeira versão da entrada \texttt{LLM} do Algoritmo 1 declarava
-\texttt{num\_ctx = 16384}. O valor estava errado e foi corrigido para
-\texttt{32768} na verificação que precedeu a execução. O Ollama não recusa um
-prompt maior que \texttt{num\_ctx}: ele descarta o excesso e processa apenas
-\texttt{num\_ctx / 2} tokens, sem emitir aviso. A medição foi feita na maior ata
-portuguesa do corpus (67.477 caracteres), lendo o campo
-\texttt{prompt\_eval\_count} devolvido pelo servidor: com
-\texttt{num\_ctx = 8192} processaram-se 4.098 tokens; com \texttt{16384}, 8.194
-tokens; com \texttt{32768}, os 19.945 tokens do documento. Só no último caso a
-ata entrou íntegra.
+\paragraph{Corte do final dos resumos longos.} \textbf{Proposta:} cortar o
+final dos resumos acima de 512 tokens, em vez de usar o \textit{head+tail} do
+\textit{baseline}, porque o corte do final remove pouco e preserva os termos da
+decisão, que o \textit{head+tail} tiraria com mais frequência
+(seção~\ref{sec:corte}). \textbf{Resposta do orientador:} aprovada (``OK''); o
+\textit{head+tail} fica descartado. \textbf{Regra:} se o resumo tokenizado, com
+\texttt{[CLS]} e \texttt{[SEP]}, passa de 512 tokens, mantêm-se \texttt{[CLS]},
+os 510 primeiros tokens do resumo e \texttt{[SEP]}, e o corte é registrado.
 
-O efeito é assimétrico entre os idiomas, o que agrava a consequência. A razão
-caracteres por token medida no tokenizador do Llama 3.1 é 3,38 em português e
-4,57 em inglês: o português fragmenta-se mais. Com \texttt{num\_ctx = 16384},
-49 das 202 atas portuguesas (24,3\%) seriam truncadas e nenhuma das inglesas: o
-corpus português chegaria mutilado ao sumarizador e o inglês não, confundindo a
-comparação entre idiomas, que é um dos eixos do estudo. Com \texttt{32768},
-nenhuma ata é truncada em nenhum dos dois idiomas
-(tabela~\ref{tab:corpus_execucao}).
-
-A correção não altera o método: a intenção sempre foi submeter o documento
-inteiro (seção~\ref{sec:prompt-fixado}), e é essa intenção que o valor anterior
-não cumpria. O custo é de tempo de execução, não de validade: o cache de chaves
-e valores de 32 mil tokens eleva o consumo de memória do modelo para cerca de
-9~GB, dentro da memória da máquina (tabela~\ref{tab:ambiente}).
-
-\textbf{Proposta:} manter a correção. \textbf{Resposta do orientador:} aprovada
-(``OK''). \textbf{Onde entra:} na entrada \texttt{LLM} do
-Algoritmo~\ref{alg:sumarizacao}, com \texttt{num\_ctx = 32768}.
-
-\subsubsection{Corte do final dos resumos longos}\label{sec:decisao-corte}
-
-\textbf{Proposta:} cortar o final dos resumos acima de 512 tokens, mantendo os
-primeiros tokens do resumo mais \texttt{[CLS]} e \texttt{[SEP]}, em vez do
-\textit{head+tail} do \textit{baseline}: o corte do final remove pouco e
-preserva os termos da decisão, que o \textit{head+tail} tiraria com mais
-frequência (seção~\ref{sec:corte}). \textbf{Resposta do orientador:} aprovada
-(``OK''); o \textit{head+tail} fica descartado. \textbf{Onde entra:} nos passos
-2 e 3 da função~\ref{fn:ingerir}.
-
-\subsubsection{Remoção do preâmbulo}\label{sec:decisao-preambulo}
-
-\textbf{Proposta:} remover o preâmbulo dos resumos em inglês na ingestão pelo
-Algoritmo 2, por regra fixa e documentada, mantendo o corpus literal
+\paragraph{Remoção do preâmbulo.} \textbf{Proposta:} remover o preâmbulo dos
+resumos em inglês na ingestão, por regra fixa, mantendo o corpus literal
 (seção~\ref{sec:preambulo}). \textbf{Resposta do orientador:} remover
-(``Remove''). \textbf{Onde entra:} no passo 1 da função~\ref{fn:ingerir}, com
-as duas cadeias exatas na entrada da função. O corpus continua literal: a
-remoção é feita sobre a cópia carregada pelo Algoritmo 2.
+(``Remove''). \textbf{Regra:} se o resumo em inglês começa exatamente por
+\texttt{Pre\_long}, remove-se \texttt{Pre\_long}; senão, se começa exatamente
+por \texttt{Pre\_short}, remove-se \texttt{Pre\_short}; nos dois casos,
+removem-se também os espaços e as quebras de linha seguintes, e nada mais. A
+comparação é de cadeia exata e só no início do texto. Como nenhuma forma é
+prefixo da outra, a ordem de teste não muda o resultado; a longa é testada
+primeiro para que a regra tenha uma única leitura.
 
-\subsection{Observação para a leitura dos resultados}\label{sec:obs-leitura}
+\paragraph{Ordem da ingestão.} Os passos têm ordem fixa: (1) remover o
+preâmbulo, só em inglês; (2) tokenizar com o tokenizador do idioma, o do
+BERTimbau (\texttt{bert-base-portuguese-cased}) em português e o do BERT
+(\texttt{bert-base-cased}) em inglês, com \texttt{[CLS]} e \texttt{[SEP]}; (3)
+cortar o final até 512 tokens. O corte vem depois da remoção, para que o
+preâmbulo não ocupe o orçamento; como a remoção só encurta o texto, todo resumo
+cortado está na lista \texttt{Acima}. As regras agem sobre a cópia carregada
+pelo Algoritmo 2: a tabela \texttt{Resumo} não é alterada.
 
-\textbf{Assimetria do corte.} Os cortes se concentram no recorte
-\texttt{before\_2016} e são mais frequentes em inglês
-(seção~\ref{sec:acima}). A assimetria não exige ação sobre os dados, mas deve
-ser considerada na leitura dos resultados do Algoritmo 2 por período e por
-idioma.
+\section{Classificação}\label{sec:classificacao}
 
-\section{Algoritmo 2: classificação e predição}\label{sec:alg2}
+\subsection{Metodologia}\label{sec:alg2}
 
-O Algoritmo 2 classifica a direção futura da taxa SELIC a partir dos resumos.
-Esta seção é só especificação: \textbf{o Algoritmo 2 ainda não foi executado}, e
-os resultados da predição são trabalho futuro (seção~\ref{sec:limitacoes}). Ele
-recebe a tabela \texttt{Resumo} do Algoritmo 1 como dado de entrada, de modo que
-pode ser executado sem executar o Algoritmo 1. O procedimento replica o
-protocolo de Forti~\cite{forti2025} --- 30 repetições de \textit{holdout},
-divisão 80/20 estratificada, três recortes temporais e hiperparâmetros fixos
----, mudando apenas a representação de entrada: o resumo em vez da ata truncada.
-Com uma submissão por ata, cada ata contribui com um único resumo, como cada ata
-contribui com um único texto truncado no \textit{baseline}. O algoritmo é
-escrito para qualquer número de resumos por ata.
+\subsection{Resultados}\label{sec:res-alg2}
 
-Um bloco do pacote de algoritmos não pode ser dividido entre páginas, por isso
-o Algoritmo 2 é apresentado em três partes: a função~\ref{fn:ingerir}, que
-prepara cada resumo para o classificador; o procedimento~\ref{proc:holdout},
-que executa uma repetição do protocolo; e o Algoritmo~\ref{alg:predicao}, que
-os chama.
-
-A função~\ref{fn:ingerir} recebe um resumo literal da tabela \texttt{Resumo} e o
-seu idioma e devolve a sequência de tokens que o classificador recebe. Ela age
-sobre a cópia carregada pelo Algoritmo 2: a tabela \texttt{Resumo} não é
-alterada. Na entrada, \texttt{Pre\_long} e \texttt{Pre\_short} são as duas
-formas exatas do preâmbulo dos resumos em inglês (seção~\ref{sec:preambulo});
-cada uma é uma única linha, com um espaço simples entre as palavras, e a quebra
-no texto impresso é só de diagramação. As duas coincidem até ``less'' e diferem
-no caractere seguinte: vírgula na longa, dois-pontos na curta. Como nenhuma é
-prefixo da outra, a ordem de teste não muda o resultado, mas a longa é testada
-primeiro para que a regra tenha uma única leitura. A comparação é de cadeia
-exata, caractere por caractere, e só no início do texto: a frase em outra
-posição, ou com qualquer diferença, não é removida. Os três passos têm ordem
-fixa, e o corte vem depois da remoção do preâmbulo. Os passos são:
-
-% PROSA fn:ingerir
-\begin{enumerate}
-\item Se \texttt{lang} é en e \texttt{texto} começa exatamente por
-  \texttt{Pre\_long}, remover \texttt{Pre\_long}; senão, se começa exatamente
-  por \texttt{Pre\_short}, remover \texttt{Pre\_short}; nos dois casos, remover
-  também os espaços e as quebras de linha seguintes, e nada mais.
-\item \texttt{seq} recebe os tokens de \texttt{texto}, com \texttt{[CLS]} e
-  \texttt{[SEP]}, no tokenizador do BERTimbau
-  (\texttt{bert-base-portuguese-cased}) se pt e do BERT
-  (\texttt{bert-base-cased}) se en: é a sequência que o classificador recebe.
-\item Se \texttt{seq} passa de \texttt{L\_max} tokens, cortar o final, mantendo
-  \texttt{[CLS]}, os \texttt{L\_max} $-$ 2 primeiros tokens do resumo e
-  \texttt{[SEP]}, e registrar o corte.
-\item Devolver \texttt{seq}.
-\end{enumerate}
-
-\begin{function}[H]
-\caption{Ingerir(texto, lang)}\label{fn:ingerir}
-\KwIn{\texttt{texto}: cópia de um resumo literal da tabela \texttt{Resumo};
-  \texttt{lang}: o seu idioma\\
-  \texttt{Pre\_long} = \texttt{Here is a summary of the document in 300 words or
-  less, preserving the topics discussed and the assessments presented:}\\
-  \texttt{Pre\_short} = \texttt{Here is a summary of the document in 300 words
-  or less:}\\
-  \texttt{L\_max} = 512: limite de entrada do classificador, com \texttt{[CLS]}
-  e \texttt{[SEP]}}
-\KwOut{\texttt{seq}: sequência de no máximo \texttt{L\_max} tokens; registro do
-  corte, se houver}
-\tcp{Se \texttt{lang} é en e \texttt{texto} começa exatamente por
-  \texttt{Pre\_long}, remover \texttt{Pre\_long}; senão, se começa exatamente
-  por \texttt{Pre\_short}, remover \texttt{Pre\_short}; nos dois casos, remover
-  também os espaços e as quebras de linha seguintes, e nada mais.}
-\If{\texttt{lang} = en}{
-  \uIf{\texttt{texto} começa por \texttt{Pre\_long}}{remover \texttt{Pre\_long}
-    e os espaços e quebras de linha seguintes\;}
-  \ElseIf{\texttt{texto} começa por \texttt{Pre\_short}}{remover
-    \texttt{Pre\_short} e os espaços e quebras de linha seguintes\;}
-}
-\tcp{\texttt{seq} recebe os tokens de \texttt{texto}, com \texttt{[CLS]} e
-  \texttt{[SEP]}, no tokenizador do BERTimbau
-  (\texttt{bert-base-portuguese-cased}) se pt e do BERT
-  (\texttt{bert-base-cased}) se en: é a sequência que o classificador recebe.}
-\texttt{seq} $\gets$ tokens de \texttt{texto} no tokenizador do idioma\;
-\tcp{Se \texttt{seq} passa de \texttt{L\_max} tokens, cortar o final, mantendo
-  \texttt{[CLS]}, os \texttt{L\_max} $-$ 2 primeiros tokens do resumo e
-  \texttt{[SEP]}, e registrar o corte.}
-\If{$|\texttt{seq}| > \texttt{L\_max}$}{
-  \texttt{seq} $\gets$ \texttt{[CLS]}, os \texttt{L\_max} $-$ 2 primeiros tokens
-  do resumo, \texttt{[SEP]}\;
-  registrar o corte\;
-}
-\tcp{Devolver \texttt{seq}.}
-\KwRet{\texttt{seq}}\;
-\end{function}
-
-O procedimento~\ref{proc:holdout} executa a repetição \texttt{i} do protocolo
-para o idioma \texttt{lang} e o período \texttt{p}. A divisão entre treino e
-teste é feita sobre reuniões, e não sobre resumos: os \texttt{N\_sub} resumos de
-uma ata descrevem o mesmo documento e têm o mesmo rótulo, e separá-los entre os
-dois lados levaria documentos de teste para o treino. Com \texttt{N\_sub = 1},
-os conjuntos de treino e de teste têm o tamanho dos do \textit{baseline}. Os
-passos são:
-
-% PROSA proc:holdout
-\begin{enumerate}
-\item \texttt{(Mtr, Mts)} recebe uma partição de \texttt{Mp} sorteada com
-  \texttt{gerador}, com 80\% das reuniões para treino e 20\% para teste,
-  estratificada por \texttt{rotulo}.
-\item \texttt{Dtr} recebe os pares (\texttt{Entrada[lang][m][j]},
-  \texttt{rotulo(m)}) das reuniões de \texttt{Mtr}, e \texttt{Dts}, os das
-  reuniões de \texttt{Mts}: são os exemplos de treino e de teste.
-\item \texttt{Mod\_i} recebe o ajuste fino de \texttt{Mod\_lang} sobre
-  \texttt{Dtr} com \texttt{Hiperparametros}: é o classificador desta repetição.
-\item Para cada \texttt{m} de \texttt{Mts} e cada \texttt{j}, a predição
-  \texttt{Pred[lang][p][i][m][j]} recebe a classe que \texttt{Mod\_i} prevê para
-  \texttt{Entrada[lang][m][j]}.
-\item \texttt{DesempTeste} recebe o \texttt{Desempenho} das predições sobre
-  \texttt{Dts}, e \texttt{DesempTreino}, o de \texttt{Mod\_i} sobre
-  \texttt{Dtr}; \texttt{Desempenho} calcula acurácia, F1-macro e precisão,
-  revocação e F1 por classe.
-\item Se \texttt{N\_sub} $> 1$, para cada \texttt{m} de \texttt{Mts},
-  \texttt{Moda(m)} recebe a classe mais frequente entre as suas predições e
-  \texttt{Concord[lang][p][i][m]}, a fração das predições igual a ela;
-  \texttt{DesempVoto} recebe o \texttt{Desempenho} das modas.
-\end{enumerate}
-
-\begin{procedure}[H]
-\caption{RepeticaoHoldout(lang, p, i, Mp)}\label{proc:holdout}
-\KwIn{\texttt{lang}, \texttt{p}, \texttt{i}: idioma, período e número da
-  repetição\\
-  \texttt{Mp}: reuniões do período, cada uma com \texttt{rotulo(m)}, a decisão
-  da reunião seguinte\\
-  \texttt{Entrada[lang][m][j]}: sequências preparadas pela
-  função~\ref{fn:ingerir}; \texttt{N\_sub}: resumos por ata\\
-  \texttt{gerador}: gerador pseudoaleatório comum a todas as repetições\\
-  \texttt{Mod\_lang}: \texttt{Mod\_pt} ou \texttt{Mod\_en}, modelo pré-treinado
-  do idioma; \texttt{Hiperparametros}: os do Algoritmo~\ref{alg:predicao}}
-\KwOut{\texttt{Pred[lang][p][i][m][j]}; \texttt{DesempTeste[lang][p][i]} e
-  \texttt{DesempTreino[lang][p][i]}; se \texttt{N\_sub} $> 1$,
-  \texttt{Concord[lang][p][i][m]} e \texttt{DesempVoto[lang][p][i]}}
-\tcp{\texttt{(Mtr, Mts)} recebe uma partição de \texttt{Mp} sorteada com
-  \texttt{gerador}, com 80\% das reuniões para treino e 20\% para teste,
-  estratificada por \texttt{rotulo}.}
-\texttt{(Mtr, Mts)} $\gets$ partição 80/20 de \texttt{Mp}, estratificada por
-\texttt{rotulo}, sorteada com \texttt{gerador}\;
-\tcp{\texttt{Dtr} recebe os pares (\texttt{Entrada[lang][m][j]},
-  \texttt{rotulo(m)}) das reuniões de \texttt{Mtr}, e \texttt{Dts}, os das
-  reuniões de \texttt{Mts}: são os exemplos de treino e de teste.}
-\texttt{Dtr} $\gets$ \{(\texttt{Entrada[lang][m][j]}, \texttt{rotulo(m)}) :
-\texttt{m} $\in$ \texttt{Mtr}, $1 \le j \le$ \texttt{N\_sub}\}\;
-\texttt{Dts} $\gets$ \{(\texttt{Entrada[lang][m][j]}, \texttt{rotulo(m)}) :
-\texttt{m} $\in$ \texttt{Mts}, $1 \le j \le$ \texttt{N\_sub}\}\;
-\tcp{\texttt{Mod\_i} recebe o ajuste fino de \texttt{Mod\_lang} sobre
-  \texttt{Dtr} com \texttt{Hiperparametros}: é o classificador desta
-  repetição.}
-\texttt{Mod\_i} $\gets$ ajuste fino de \texttt{Mod\_lang} sobre \texttt{Dtr}
-com \texttt{Hiperparametros}\;
-\tcp{Para cada \texttt{m} de \texttt{Mts} e cada \texttt{j}, a predição
-  \texttt{Pred[lang][p][i][m][j]} recebe a classe que \texttt{Mod\_i} prevê
-  para \texttt{Entrada[lang][m][j]}.}
-\ForEach{\texttt{m} de \texttt{Mts} e \texttt{j} de 1 até \texttt{N\_sub}}{
-  \texttt{Pred[lang][p][i][m][j]} $\gets$ classe prevista por \texttt{Mod\_i}
-  para \texttt{Entrada[lang][m][j]}\;
-}
-\tcp{\texttt{DesempTeste} recebe o \texttt{Desempenho} das predições sobre
-  \texttt{Dts}, e \texttt{DesempTreino}, o de \texttt{Mod\_i} sobre
-  \texttt{Dtr}; \texttt{Desempenho} calcula acurácia, F1-macro e precisão,
-  revocação e F1 por classe.}
-\texttt{DesempTeste[lang][p][i]} $\gets$ \Desempenho{\texttt{Pred}, rótulos de
-\texttt{Dts}}\;
-\texttt{DesempTreino[lang][p][i]} $\gets$ \Desempenho{\texttt{Mod\_i},
-\texttt{Dtr}}\;
-\tcp{Se \texttt{N\_sub} $> 1$, para cada \texttt{m} de \texttt{Mts},
-  \texttt{Moda(m)} recebe a classe mais frequente entre as suas predições e
-  \texttt{Concord[lang][p][i][m]}, a fração das predições igual a ela;
-  \texttt{DesempVoto} recebe o \texttt{Desempenho} das modas.}
-\If{\texttt{N\_sub} $> 1$}{
-  \ForEach{\texttt{m} de \texttt{Mts}}{
-    \texttt{Moda(m)} $\gets$ classe mais frequente em
-    \texttt{Pred[lang][p][i][m][1..N\_sub]}\;
-    \texttt{Concord[lang][p][i][m]} $\gets$ fração das predições de \texttt{m}
-    iguais a \texttt{Moda(m)}\;
-  }
-  \texttt{DesempVoto[lang][p][i]} $\gets$ \Desempenho{modas de \texttt{Mts},
-  rótulos de \texttt{Mts}}\;
-}
-\end{procedure}
-
-O Algoritmo~\ref{alg:predicao} recebe as reuniões dos dois idiomas, a tabela
-\texttt{Resumo}, os modelos pré-treinados, os recortes temporais, a semente, o
-número de repetições, os hiperparâmetros e os resultados do \textit{baseline}.
-Semente, número de repetições e hiperparâmetros são iguais aos de
-Forti~\cite{forti2025}, para que a única diferença em relação ao
-\textit{baseline} seja a entrada do modelo. Os resumos produzidos pelo
-experimento de determinismo nunca entram nos dados de treino ou de teste. O
-algoritmo devolve o desempenho de cada repetição no teste e no treino, as
-predições por resumo e, se houver mais de um resumo por ata, a concordância por
-ata e o desempenho por voto majoritário, além da comparação com o
-\textit{baseline}. Os passos são:
-
-% PROSA alg:predicao
-\begin{enumerate}
-\item \texttt{gerador} recebe \texttt{Semente}: é o gerador pseudoaleatório que
-  sorteia as partições de todas as repetições.
-\item Para cada idioma \texttt{lang}.
-\item Ordenar \texttt{M\_lang} pela data de referência; para cada reunião
-  \texttt{m}, \texttt{rotulo(m)} recebe a decisão da reunião seguinte: é o alvo
-  da classificação.
-\item Retirar de \texttt{M\_lang} a última reunião, que não tem reunião
-  seguinte e, por isso, não tem rótulo.
-\item Para cada \texttt{m} e cada \texttt{j}, \texttt{Entrada[lang][m][j]}
-  recebe \texttt{Ingerir}, que tira o preâmbulo fixo em inglês, tokeniza e corta
-  o final do que passar de \texttt{L\_max}.
-\item Para cada período \texttt{p} de \texttt{Periodos}.
-\item \texttt{Mp} recebe as reuniões do período: antes de \texttt{Corte} em
-  \texttt{before\_2016}, a partir de \texttt{Corte} em \texttt{after\_2016} e
-  todas em \texttt{full}.
-\item Para \texttt{i} de 1 até \texttt{N\_rep}, \texttt{RepeticaoHoldout}
-  sorteia a divisão por reunião, faz o ajuste fino e grava as predições e o
-  desempenho.
-\item Se \texttt{N\_sub} $> 1$, relatar a distribuição de \texttt{Concord}, no
-  total e por classe verdadeira, e as atas com \texttt{Concord} $< 1$.
-\item Comparar a distribuição de \texttt{DesempTeste} nas \texttt{N\_rep}
-  repetições com \texttt{Baseline}, em pares (\texttt{lang}, \texttt{p},
-  \texttt{i}).
-\end{enumerate}
-
-\begin{algorithm}[H]
-\caption{Classificação e predição}\label{alg:predicao}
-\KwIn{\texttt{Idiomas} = \{pt, en\}; \texttt{M\_pt}, \texttt{M\_en}: reuniões
-  com data de referência e decisão~\cite{forti2025}\\
-  \texttt{Resumo}: tabela do Algoritmo~\ref{alg:sumarizacao}, recebida como
-  dado; \texttt{N\_sub} = 1 (seção~\ref{sec:det-decisao})\\
-  \texttt{Mod\_pt}: BERTimbau, \texttt{bert-base-portuguese-cased}%
-  ~\cite{souza2020}; \texttt{Mod\_en}: BERT,
-  \texttt{bert-base-cased}~\cite{devlin2019}\\
-  \texttt{L\_max} = 512; \texttt{Periodos} = \{\texttt{before\_2016},
-  \texttt{after\_2016}, \texttt{full}\}; \texttt{Corte} = 2016-01-01\\
-  \texttt{Semente} = 42; \texttt{N\_rep} = 30: repetições de \textit{holdout}\\
-  \texttt{Hiperparametros} = \{\texttt{batch\_size = 32},
-  \texttt{learning\_rate = 2e-5}, \texttt{epochs = 3},
-  \texttt{max\_length = L\_max}\}\\
-  \texttt{Baseline}: resultados por repetição de Forti com
-  \textit{head+tail}~\cite{sun2019}, por (\texttt{lang}, \texttt{p},
-  \texttt{i})}
-\KwOut{\texttt{DesempTeste}, \texttt{DesempTreino} e \texttt{Pred}, do
-  procedimento~\ref{proc:holdout}; \texttt{Concord} e \texttt{DesempVoto}, só se
-  \texttt{N\_sub} $> 1$; a comparação com \texttt{Baseline}}
-\tcp{\texttt{gerador} recebe \texttt{Semente}: é o gerador pseudoaleatório que
-  sorteia as partições de todas as repetições.}
-\texttt{gerador} $\gets$ \texttt{Semente}\;
-\tcp{Para cada idioma \texttt{lang}.}
-\ForEach{idioma \texttt{lang} de \texttt{Idiomas}}{
-  \tcp{Ordenar \texttt{M\_lang} pela data de referência; para cada reunião
-    \texttt{m}, \texttt{rotulo(m)} recebe a decisão da reunião seguinte: é o
-    alvo da classificação.}
-  ordenar \texttt{M\_lang} pela data de referência\;
-  \lForEach{\texttt{m} de \texttt{M\_lang}}{\texttt{rotulo(m)} $\gets$ decisão
-    da reunião seguinte a \texttt{m}}
-  \tcp{Retirar de \texttt{M\_lang} a última reunião, que não tem reunião
-    seguinte e, por isso, não tem rótulo.}
-  retirar de \texttt{M\_lang} a última reunião\;
-  \tcp{Para cada \texttt{m} e cada \texttt{j}, \texttt{Entrada[lang][m][j]}
-    recebe \texttt{Ingerir}, que tira o preâmbulo fixo em inglês, tokeniza e
-    corta o final do que passar de \texttt{L\_max}.}
-  \lForEach{\texttt{m} de \texttt{M\_lang} e \texttt{j} de 1 até
-    \texttt{N\_sub}}{\texttt{Entrada[lang][m][j]} $\gets$
-    \Ingerir{\texttt{Resumo[lang][m][j]}, \texttt{lang}}}
-  \tcp{Para cada período \texttt{p} de \texttt{Periodos}.}
-  \ForEach{período \texttt{p} de \texttt{Periodos}}{
-    \tcp{\texttt{Mp} recebe as reuniões do período: antes de \texttt{Corte} em
-      \texttt{before\_2016}, a partir de \texttt{Corte} em \texttt{after\_2016}
-      e todas em \texttt{full}.}
-    \texttt{Mp} $\gets$ reuniões de \texttt{M\_lang} no período \texttt{p}\;
-    \tcp{Para \texttt{i} de 1 até \texttt{N\_rep}, \texttt{RepeticaoHoldout}
-      sorteia a divisão por reunião, faz o ajuste fino e grava as predições e o
-      desempenho.}
-    \lFor{$\texttt{i} \gets 1$ \KwTo \texttt{N\_rep}}{\RepeticaoHoldout{%
-      \texttt{lang}, \texttt{p}, \texttt{i}, \texttt{Mp}}}
-    \tcp{Se \texttt{N\_sub} $> 1$, relatar a distribuição de \texttt{Concord},
-      no total e por classe verdadeira, e as atas com \texttt{Concord} $< 1$.}
-    \lIf{\texttt{N\_sub} $> 1$}{relatar \texttt{Concord[lang][p]} e as atas com
-      \texttt{Concord} $< 1$}
-  }
-}
-\tcp{Comparar a distribuição de \texttt{DesempTeste} nas \texttt{N\_rep}
-  repetições com \texttt{Baseline}, em pares (\texttt{lang}, \texttt{p},
-  \texttt{i}).}
-comparar \texttt{DesempTeste} com \texttt{Baseline}, em pares (\texttt{lang},
-\texttt{p}, \texttt{i})\;
-\end{algorithm}
-
-\paragraph{Notas do Algoritmo 2.} As notas abaixo trazem só justificativa e
-histórico; o algoritmo pode ser reproduzido sem elas.
-
-{\renewcommand{\theenumi}{\roman{enumi}}
-\renewcommand{\labelenumi}{(\theenumi)}
-\begin{enumerate}
-\item\label{nota:porata} \textbf{Análise por ata.} As predições são gravadas
-  por resumo individual (\texttt{Pred}), e não apenas agregadas. Quando há mais
-  de um resumo por ata, \texttt{Concord} é a fração dos resumos de uma ata de
-  teste que levou à classe modal: com dez resumos, \texttt{Concord = 1,0}
-  indica que todos levaram à mesma predição, e \texttt{Concord = 0,6}, que
-  quatro divergiram. Isso permitiria ligar a variância textual dos resumos à
-  variância da decisão, ata por ata. \texttt{DesempVoto} dá o desempenho por ata,
-  por voto majoritário, na granularidade do \textit{baseline}, que tem uma
-  predição por ata. Com \texttt{N\_sub = 1}, que é o caso deste estudo, essa
-  análise é degenerada e não é executada: a classe modal de cada ata é a sua
-  única predição, \texttt{Concord} vale 1 por construção e \texttt{DesempVoto}
-  coincide com \texttt{DesempTeste}, que já está na granularidade do
-  \textit{baseline}. Não há variância textual a propagar, porque o experimento
-  de determinismo a mediu como nula (seção~\ref{sec:det-resultados}).
-\item\label{nota:nrep} \textbf{Número de repetições.} \texttt{N\_rep = 30}
-  reproduz o valor adotado por Forti~\cite{forti2025}, verificável tanto na
-  declaração do código do trabalho base quanto nos seus resultados publicados,
-  que contêm as repetições 1 a 30 para cada uma das seis combinações de idioma e
-  período, totalizando 180 ajustes. Manter o mesmo valor, com a mesma semente,
-  faz a repetição \texttt{i} deste estudo usar a mesma partição da repetição
-  \texttt{i} do \textit{baseline}, e é isso que permite comparar 30 pares
-  (resumo, truncamento) em vez de duas médias de origens independentes.
-\item\label{nota:nsub} \textbf{Número de resumos por ata.} Na primeira versão
-  deste algoritmo, \texttt{N\_sub = 10} era dado, porque o Algoritmo 1
-  produziria dez resumos independentes por ata. O experimento de determinismo
-  mostrou que as submissões repetidas são idênticas
-  (seção~\ref{sec:det-resultados}), e o Algoritmo 1 passou a produzir um resumo
-  por ata. Há duas consequências para este algoritmo. A primeira é de custo: com
-  dez cópias idênticas de cada resumo, os conjuntos de treino seriam dez vezes
-  maiores sem conter nenhuma informação nova, e cada ajuste duraria cerca de dez
-  vezes mais. A segunda é de comparabilidade: a única diferença entre este
-  estudo e o \textit{baseline} passa a ser o conteúdo de cada exemplo --- resumo
-  em vez de texto truncado ---, sem diferença no número de exemplos por ata. O
-  algoritmo continua escrito para \texttt{N\_sub} genérico, para permanecer
-  válido caso o experimento seja refeito sob outra configuração e detecte
-  variação.
-\item\label{nota:ingestao} \textbf{Ingestão dos resumos.} O Algoritmo 1 entrega
-  a tabela \texttt{Resumo} literal, sem pós-processamento; as transformações que
-  o classificador exige são feitas na ingestão, sobre a cópia carregada por este
-  algoritmo. O preâmbulo é removido porque é texto constante, sem informação da
-  ata, que aparece num único idioma e ocupa tokens do orçamento
-  \texttt{L\_max}. O final é cortado, em vez de usar o \textit{head+tail} do
-  \textit{baseline}, porque nos resumos os termos da decisão de política
-  monetária aparecem com mais frequência no meio do texto, que o
-  \textit{head+tail} removeria, do que no final (seção~\ref{sec:corte}). O corte
-  vem depois da remoção do preâmbulo para que o preâmbulo não ocupe tokens do
-  orçamento. Como a remoção só encurta o texto, todo resumo cortado está na
-  lista \texttt{Acima} do Algoritmo 1, que mede o texto literal. As duas regras
-  foram decididas pelo orientador, com registro em 02/11/2026
-  (seção~\ref{sec:decisoes}).
-\end{enumerate}}
+\section{Resultados gerais}\label{sec:resultados-gerais}
 
 \section{Limitações e próximos passos}\label{sec:limitacoes}
 
-As limitações já registradas ficam nas seções a que pertencem: as da escolha
-do prompt na seção~\ref{sec:prompt-limitacoes}; a do experimento de
-determinismo, que vale para uma combinação de servidor e modelo e foi
-verificada numa amostra, na seção~\ref{sec:det-decisao}; os desvios da execução
-do Algoritmo 1 na seção~\ref{sec:desvios}; e a assimetria do corte entre
-períodos e idiomas na seção~\ref{sec:obs-leitura}.
+\paragraph{Limitações.} O prompt foi escolhido em três atas, e o resumo inglês
+não foi avaliado em dados disjuntos, porque a API do Banco Central não expõe as
+atas em inglês posteriores a março de 2025; a fidelidade, sujeita a erros em
+LLMs~\cite{kim2024}, foi verificada só por leitura de amostra. A equivalência
+que dispensa limpar o estado foi verificada numa amostra e vale para uma
+combinação de servidor e modelo (seção~\ref{sec:det-decisao}), e o corpus
+mistura três versões do servidor (seção~\ref{sec:desvios}). Os cortes na
+ingestão se concentram em \texttt{before\_2016} e em inglês
+(seção~\ref{sec:acima}), o que pesa na leitura dos resultados por recorte e por
+idioma. Por fim, 202 atas por idioma é pouco para o ajuste fino de um modelo com
+110 milhões de parâmetros: a sumarização melhora a entrada, não o volume de
+treino. Um resultado sem melhoria sobre o \textit{baseline} também é uma
+contribuição válida e será relatado como tal.
 
-Resta uma limitação de fundo. O corpus tem 202 atas por idioma, pouco para o
-ajuste fino de um modelo com 110 milhões de parâmetros. A sumarização melhora a
-qualidade da entrada, mas não o volume de dados de treino. Se os resumos forem
-mais informativos que os textos truncados, o classificador terá mais sinal por
-exemplo, o que pode bastar para melhorar o resultado, mas não há garantia. Um
-resultado sem melhoria sobre o \textit{baseline} também é uma contribuição
-válida e será relatado como tal.
-
-Os resultados da predição são trabalho futuro. Os próximos passos, na ordem em
-que serão feitos, são:
+\paragraph{Próximos passos.} Na ordem em que serão feitos:
 
 \begin{enumerate}
-\item obter a aprovação do orientador para este relatório, em particular para
-  a especificação do Algoritmo 2 (seção~\ref{sec:alg2});
+\item submeter ao orientador a especificação do Algoritmo 2, que entrará na
+  seção~\ref{sec:classificacao};
 \item implementar e executar o Algoritmo 2 sobre o corpus de resumos;
 \item comparar o desempenho com o do \textit{baseline}, em pares por
-  repetição, e analisá-lo por período, por idioma e por classe, em particular
-  na classe manutenção, em que o \textit{baseline} falha;
-\item avaliar a extensão com sumarização guiada por domínio, com o candidato C
-  como prompt e o prompt neutro como controle (decisão D8 da
-  tabela~\ref{tab:decisoes}).
+  repetição, e analisá-lo por recorte, por idioma e por classe, em particular
+  na classe manutenção;
+\item avaliar a sumarização guiada por domínio, com o candidato C como prompt e
+  o prompt neutro como controle (seção~\ref{sec:prompt}).
 \end{enumerate}
-
-Ficam como possibilidades para trabalhos futuros, fora do escopo desta
-pesquisa: a classificação direta pelo próprio LLM, sem BERT~\cite{takano2025},
-incompatível com a comparação direta com Forti~\cite{forti2025}; a extração de
-atributos numéricos pelo LLM para um classificador como XGBoost ou floresta
-aleatória; o aumento de dados com atas sintéticas geradas por LLM; e modelos de
-contexto longo, como Longformer e BigBird, que processariam a ata completa sem
-sumarização.
 
 \begin{thebibliography}{99}
 
@@ -2279,10 +1158,11 @@ Almeida, T. S., Pires, R., Abonizio, H., Nogueira, R. e Pedrini, H. (2025).
 PoETa v2: Toward More Robust Evaluation of Large Language Models in
 Portuguese. \textit{arXiv:2511.17808}.
 
-\bibitem[Araujo et al. 2025]{araujo2025}
-Araujo, D. K. G. de, Bokan, N., Comazzi, F. A. e Lenza, M. (2025). Word2Prices:
-embedding central bank communications for inflation prediction. \textit{BIS
-Working Papers}, n.~1253. Bank for International Settlements.
+\bibitem[Del Piccolo 2026]{delpiccolo2026}
+Del Piccolo, G. W. (2026). \textit{selic-direction-prediction-summaries}.
+Repositório GitHub.
+\url{https://github.com/giovanniwillik/selic-direction-prediction-summaries}.
+Acesso em: 13 nov. 2026.
 
 \bibitem[Devlin et al. 2019]{devlin2019}
 Devlin, J., Chang, M.-W., Lee, K. e Toutanova, K. (2019). BERT: Pre-training of
@@ -2294,29 +1174,15 @@ Fasolo, A. M., Graminho, F. M. e Bastos, S. B. (2022). Seeing the forest for the
 trees: using hLDA models to evaluate communication in Banco Central do Brasil.
 \textit{BIS Working Papers}, n.~1021. Bank for International Settlements.
 
-\bibitem[Fernandes et al. 2024]{fernandes2024}
-Fernandes, L. C., Dobins, G. Z. R., Lotufo, R. e Pereira, J. A. (2024).
-PublicHearingBR: A Brazilian Portuguese Dataset of Public Hearing Transcripts
-for Summarization of Long Documents. \textit{arXiv:2410.07495}.
-
 \bibitem[Forti 2025]{forti2025}
 Forti, R. A. (2025). \textit{Predição da direção futura da taxa SELIC a partir
-de atas de reunião do COPOM}. Trabalho de Conclusão de Curso, EACH/USP.
-
-\bibitem[Gambacorta et al. 2024]{gambacorta2024}
-Gambacorta, L., Kwon, B., Park, T., Patelli, P. e Zhu, S. (2024). CB-LMs:
-language models for central banking. \textit{BIS Working Papers}, n.~1215. Bank
-for International Settlements.
+de atas de reunião do COPOM}. Trabalho de Conclusão de Curso, EACH/USP. Código e
+dados: \url{https://github.com/RyanForti/Selic-Direction-Prediciton}. Acesso em:
+13 nov. 2026.
 
 \bibitem[Goldberg 1991]{goldberg1991}
 Goldberg, D. (1991). What Every Computer Scientist Should Know About
 Floating-Point Arithmetic. \textit{ACM Computing Surveys}, 23(1), pp. 5--48.
-
-\bibitem[Gössi et al. 2023]{goessi2023}
-Gössi, S., Chen, Z., Kim, W., Bermeitinger, B. e Handschuh, S. (2023).
-FinBERT-FOMC: Fine-Tuned FinBERT Model with Sentiment Focus Method for
-Enhancing Sentiment Analysis of FOMC Minutes. Em \textit{Proceedings of the 4th
-ACM International Conference on AI in Finance (ICAIF '23)}, pp. 357--364.
 
 \bibitem[Grattafiori et al. 2024]{grattafiori2024}
 Grattafiori, A. et al. (2024). The Llama 3 Herd of Models.
@@ -2341,15 +1207,6 @@ Goyal, T. e Iyyer, M. (2024). FABLES: Evaluating faithfulness and content
 selection in book-length summarization. Em \textit{1st Conference on Language
 Modeling (COLM 2024)}. arXiv:2404.01261.
 
-\bibitem[Kim et al. 2025]{kim2025}
-Kim, W., Niklaus, C., Lee, C. L. e Handschuh, S. (2025). DisSim-FinBERT: Text
-Simplification for Core Message Extraction in Complex Financial Texts.
-\textit{arXiv:2501.04959}.
-
-\bibitem[Knuth 1997]{knuth1997}
-Knuth, D. E. (1997). \textit{The Art of Computer Programming, Volume 2:
-Seminumerical Algorithms}, 3ª ed., §3.2. Addison-Wesley.
-
 \bibitem[L'Ecuyer et al. 2002]{lecuyer2002}
 L'Ecuyer, P., Simard, R., Chen, E. J. e Kelton, W. D. (2002). An
 object-oriented random-number package with many long streams and substreams.
@@ -2360,20 +1217,9 @@ Lin, C.-Y. (2004). ROUGE: A Package for Automatic Evaluation of Summaries. Em
 \textit{Proceedings of the ACL Workshop on Text Summarization Branches Out},
 pp. 74--81.
 
-\bibitem[Magdy et al. 2026]{magdy2026}
-Magdy, M., Slim, S. O. e Mohamed, E. H. (2026). Enhancing Long-Text
-Summarization Through Hybrid Extractive-Abstractive Methods with LLaMA and
-Qwen. Em \textit{Model and Data Engineering}, Lecture Notes in Computer
-Science, pp. 230--237. Springer. DOI 10.1007/978-3-032-19865-5\_19.
-
 \bibitem[Mutasodirin e Prasojo 2024]{mutasodirin2024}
 Mutasodirin, M. A. e Prasojo, R. E. (2024). Investigating Text Shortening
 Strategy in BERT: Truncation vs Summarization. \textit{arXiv:2403.12799}.
-
-\bibitem[Ouyang et al. 2024]{ouyang2024}
-Ouyang, K., Liu, Y., Li, S., Bao, R., Harimoto, K. e Sun, X. (2024).
-Modal-adaptive Knowledge-enhanced Graph-based Financial Prediction from
-Monetary Policy Conference Calls with LLM. \textit{arXiv:2403.16055}.
 
 \bibitem[Pappagari et al. 2019]{pappagari2019}
 Pappagari, R., \.{Z}elasko, P., Villalba, J., Carmiel, Y. e Dehak, N. (2019).
@@ -2391,19 +1237,11 @@ Reimers, N. e Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using
 Siamese BERT-Networks. Em \textit{Proceedings of EMNLP-IJCNLP 2019},
 pp. 3982--3992.
 
-\bibitem[Savage s.d.]{savage}
-Savage, S. (s.d.). \textit{The Bad Seeds: A Parallel Random Number Generation
-Problem}. Probability Management.
-
 \bibitem[Shah et al. 2023]{shah2023}
 Shah, A., Paturi, S. e Chava, S. (2023). Trillion Dollar Words: A New Financial
 Dataset, Task \& Market Analysis. Em \textit{Proceedings of the 61st Annual
 Meeting of the Association for Computational Linguistics (ACL 2023)}.
 arXiv:2305.07972.
-
-\bibitem[Shah et al. 2025]{shah2025}
-Shah, A. et al. (2025). Words That Unite The World: A Unified Framework for
-Deciphering Central Bank Communications Globally. \textit{arXiv:2505.17048}.
 
 \bibitem[Souza et al. 2020]{souza2020}
 Souza, F., Nogueira, R. e Lotufo, R. (2020). BERTimbau: Pretrained BERT Models
@@ -2413,205 +1251,6 @@ for Brazilian Portuguese. Em \textit{Proceedings of BRACIS 2020}.
 Sun, C., Qiu, X., Xu, Y. e Huang, X. (2019). How to Fine-Tune BERT for Text
 Classification? Em \textit{Proceedings of CCL 2019}, pp. 194--206.
 
-\bibitem[Takano et al. 2025]{takano2025}
-Takano, K., Hirano, M. e Nakagawa, K. (2025). Modeling Hawkish-Dovish Latent
-Beliefs in Multi-Agent Debate-Based LLMs for Monetary Policy Decision
-Classification. \textit{arXiv:2511.02469}.
-
-\bibitem[Tang e Yang 2026]{tang2026}
-Tang, Y. e Yang, Y. (2026). Mind the Shift: Decoding Monetary Policy Stance from
-FOMC Statements with Large Language Models. \textit{arXiv:2603.14313}.
-
-\bibitem[Yao et al. 2025]{yao2025}
-Yao, R., Chai, Q., Yao, J., Li, S., Chen, J., Zhang, Q. e Wang, H. (2025).
-Interpreting Fedspeak with Confidence: A LLM-Based Uncertainty-Aware Framework
-Guided by Monetary Policy Transmission Paths. \textit{arXiv:2508.08001}.
-
 \end{thebibliography}
-
-\appendix
-
-\section{Textos dos candidatos a prompt}\label{ap:candidatos}
-
-Texto integral dos quatro candidatos da seção~\ref{sec:prompt-candidatos}, em
-português, como submetidos na primeira rodada, com o limite de 350 palavras
-daquela rodada. O marcador \texttt{\{texto\}} é substituído pelo texto completo
-e limpo da ata. O candidato A, selecionado, está na
-seção~\ref{sec:prompt-fixado} nos dois idiomas, com o limite já corrigido para
-300 palavras (seção~\ref{sec:prompt-calibracao}).
-
-\noindent\textbf{A --- Neutro}
-\begin{lstlisting}
-Resuma o documento a seguir em no maximo 350 palavras.
-O resumo deve preservar os temas discutidos e as avaliacoes apresentadas, sem
-acrescentar informacao que nao esteja no texto original.
-
-Documento:
-{texto}
-
-Resumo:
-\end{lstlisting}
-
-\noindent\textbf{B --- Temático}
-\begin{lstlisting}
-Resuma o documento a seguir em no maximo 350 palavras.
-Cubra, quando presentes no texto, os seguintes temas: cenario externo, atividade
-economica, mercado de trabalho, inflacao corrente e expectativas de inflacao,
-condicoes financeiras e de credito, e o balanco de riscos descrito.
-Restrinja-se ao conteudo do documento, sem inferencias ou conclusoes proprias.
-
-Documento:
-{texto}
-
-Resumo:
-\end{lstlisting}
-
-\noindent\textbf{C --- Estruturado por seções}
-\begin{lstlisting}
-Resuma o documento a seguir preenchendo as secoes abaixo.
-Use no maximo 3 frases por secao e restrinja-se ao conteudo do documento.
-Se uma secao nao for abordada no texto, escreva "Nao abordado".
-
-1. Cenario externo:
-2. Atividade economica e mercado de trabalho:
-3. Inflacao e expectativas:
-4. Condicoes financeiras e de credito:
-5. Balanco de riscos:
-
-Documento:
-{texto}
-
-Resumo:
-\end{lstlisting}
-
-\noindent\textbf{D --- Extrativo}
-\begin{lstlisting}
-Do documento a seguir, selecione os 10 trechos mais
-informativos sobre a avaliacao economica apresentada e reproduza-os literalmente,
-na ordem em que aparecem, um por linha, sem alterar as palavras e sem comentarios.
-
-Documento:
-{texto}
-
-Trechos:
-\end{lstlisting}
-
-\section{Textos divergentes do experimento de determinismo}\label{ap:divergentes}
-
-Os dois casos extremos da tabela~\ref{tab:magnitude}, na primeira execução do
-experimento (seção~\ref{sec:det-resultados}).
-
-\subsection{Caso brando: pt 20230920}
-
-A divergência começa perto do fim do texto (tabela~\ref{tab:magnitude}) e se
-resume a uma frase reformulada:
-
-\begin{lstlisting}
-j = 1     "A decisao de politica monetaria e de reduzir a taxa basica de juros
-           em 0,50 ponto percentual, para 12,75% a.a., e entende que essa
-           decisao e compativel com a estrategia de convergencia da inflacao
-           para o redor da meta ao longo do horizonte relevante."
-
-j = 2..10 "O Comite decide reduzir a taxa basica de juros em 0,50 ponto
-           percentual, para 12,75% a.a., e entende que essa decisao e
-           compativel com a estrategia de convergencia da inflacao para o
-           redor da meta ao longo do horizonte relevante."
-\end{lstlisting}
-
-Mesmo conteúdo, mesma decisão, mesmo número. Muda o sujeito da frase.
-
-\subsection{Caso severo: en 20110720}
-
-Aqui a divergência começa no primeiro caractere, e as duas saídas adotam
-formatos distintos. A submissão $j = 1$ produz prosa corrida e emite um
-preâmbulo; as submissões $j = 2$ a $j = 10$ produzem um resumo em tópicos, com
-cabeçalhos, e 111 palavras a mais.
-
-\begin{lstlisting}
-j = 1 (inicio)
-  "Here is a summary of the document in 300 words or less:
-   The 160th Meeting of the Monetary Policy Committee (Copom) was held on
-   July 19th and 20th, 2011. The committee discussed recent economic
-   developments, inflation trends, and monetary policy decisions. [...]"
-
-j = 2..10 (inicio)
-  "The document is the minutes of the 160th meeting of the Monetary Policy
-   Committee (Copom) of the Central Bank of Brazil (BCB), held on July 19th
-   and 20th, 2011. [...]
-   **Recent Economic Developments**
-   * Inflation measured by IPCA decreased to 0.15% in June, down from 0.47%
-     in May. [...]"
-\end{lstlisting}
-
-Quanto à fidelidade, as duas variantes relatam os mesmos fatos e os mesmos
-números do documento original --- IPCA de 0,15\% em junho contra 0,47\% em
-maio, acumulado de 6,71\% em doze meses, Selic elevada a 12,50\% sem viés. A
-diferença é de forma e de extensão, não de conteúdo inventado: nenhuma das
-variantes acrescentou informação ausente da ata.
-
-A diferença de extensão tem uma consequência mensurável: a variante de $j = 2$
-a $j = 10$ tem 584 tokens BERT e excede o limite de 512, enquanto a de $j = 1$
-tem 359 e cabe nele. A contagem de resumos acima do limite depende, portanto,
-de qual variante é produzida. Na primeira execução, três das dez atas inglesas
-da amostra excederam o limite; na segunda, com a variante que o corpus
-efetivamente registra, duas.
-
-\section{Artefatos e reprodução}\label{ap:artefatos}
-
-Os arquivos de dados estão em \texttt{ic\_exploracao/}:
-
-\begin{lstlisting}
-resumos/resumos_{pt,en}.jsonl                      Resumo, o corpus (j = 1)
-resumos/determinismo_frio_{pt,en}.jsonl            teste, segunda execucao
-resumos/determinismo_padrao_{pt,en}.jsonl          teste, primeira execucao
-output/algoritmo1/determinismo_frio_relatorio.json decisao de N_sub
-output/algoritmo1/over_l_max_corpus_*.csv          Acima, do Algoritmo 1
-output/algoritmo1/similaridades_frio_*             Sim, segunda execucao
-output/algoritmo1/estatisticas_frio_*.csv          estatisticas de Sim
-output/algoritmo1/verificacao_versao_0.40.5.json   equivalencia na 0.40.5
-output/algoritmo1/registro_execucao_*.jsonl        ambiente e tempos
-\end{lstlisting}
-
-A implementação da geração do corpus lê a decisão de \texttt{N\_sub} do
-relatório da segunda execução do teste
-(\texttt{determinismo\_frio\_relatorio.json}) e aborta se esse relatório
-estiver ausente ou divergir da configuração.
-
-O experimento de determinismo é reproduzível por linha de comando, em
-\texttt{ic\_exploracao/algoritmo1/}:
-
-\begin{lstlisting}
-python determinismo.py --selecionar      # fixa a amostra, imprime os comandos
-python determinismo.py --verificar       # primeira execucao: veredito por ata
-python determinismo.py --diagnosticar    # primeira execucao: isola a causa
-python determinismo.py --rodar-frio      # segunda execucao: 200 chamadas
-python determinismo.py --verificar-frio  # segunda execucao: veredito por ata
-python determinismo.py --verificar-versao  # equivalencia na versao em uso
-\end{lstlisting}
-
-\begin{lstlisting}
-python analisar_variancia.py --fonte padrao   # primeira execucao: similaridades
-python analisar_variancia.py --fonte frio     # segunda execucao: similaridades
-\end{lstlisting}
-
-As saídas do experimento ficam em \texttt{ic\_exploracao/output/algoritmo1/}:
-\texttt{amostra\_determinismo.json} (a amostra e o critério),
-\texttt{determinismo\_por\_ata.csv} e \texttt{determinismo\_relatorio.json} (o
-veredito da primeira execução), \texttt{determinismo\_diagnostico.json} (a
-replicação controlada), \texttt{determinismo\_frio\_por\_ata.csv} e
-\texttt{determinismo\_frio\_relatorio.json} (o veredito da segunda execução e a
-decisão de \texttt{N\_sub}). As similaridades par a par e as agregações de cada
-execução ficam em arquivos com o nome da condição:
-\texttt{similaridades\_padrao\_*} e \texttt{estatisticas\_padrao\_*.csv} para a
-primeira, \texttt{similaridades\_frio\_*} e \texttt{estatisticas\_frio\_*.csv}
-para a segunda. Cada condição tem os seus resumos em arquivo próprio, separado
-do corpus do estudo.
-
-Os artefatos da escolha do prompt estão em
-\texttt{ic\_exploracao/validacao\_prompt/}: \texttt{atas\_pt\_pos\_mar2025.json}
-(o conjunto de validação), \texttt{testar\_prompts.py} e
-\texttt{resultado\_prompts.json} (a primeira rodada),
-\texttt{checar\_prompt\_en.py} e \texttt{resultado\_prompt\_en.json} (a
-verificação do prompt inglês) e \texttt{log\_prompts.txt}.
 
 \end{document}
